@@ -73,6 +73,59 @@ commit-msg 훅 -> Co-Authored-By 자동 제거
 - 터미널에서 단독 실행 불가 (Claude가 AI로 파일을 생성하는 방식)
 - 설치 후 Claude Code 재시작 필요
 
+### Plan 모드와 연동
+
+`/init-project`는 독립된 프로그램이 아니라 **Claude가 대화 컨텍스트 안에서 실행하는 명령**입니다. Plan 모드(`/plan`)에서 아키텍처를 논의한 후 실행하면, 논의 내용이 모두 반영된 프로젝트 구조가 생성됩니다.
+
+```
+/plan                                # Plan 모드 진입
+     |
+     v
+사용자: "FastAPI + PostgreSQL + Redis로
+        인증 시스템이 포함된 REST API를 만들려고 해.
+        Repository 패턴 쓰고, JWT 인증으로 가자."
+     |
+     v
+Claude: 아키텍처 설계, 모듈 분리, 기술 선택 논의
+        (src/api, src/auth, src/persistence 구조 제안)
+        (Redis 캐싱 전략, JWT vs Session 트레이드오프 논의)
+     |
+     v
+Plan 모드 종료                        # Claude가 논의 내용 전부 기억
+     |
+     v
+/init-project ./my-api               # Plan 컨텍스트를 활용하여 생성
+     |
+     v
+  CLAUDE.md
+  ├── Overview: "JWT 인증이 포함된 FastAPI REST API"
+  ├── Tech Stack: Python 3.12, FastAPI, PostgreSQL, Redis
+  └── Conventions: Repository 패턴, async/await 전체 적용
+
+  docs/architecture.md
+  ├── Components: api, auth, persistence  <- Plan에서 합의한 모듈 구조
+  └── Data Flow: Client -> FastAPI -> Auth(JWT) -> Repository -> DB
+
+  docs/decisions/
+  ├── ADR-001-repository-pattern.md       <- Plan에서 논의한 결정
+  ├── ADR-002-jwt-authentication.md
+  └── ADR-003-redis-caching-strategy.md
+
+  src/
+  ├── api/CLAUDE.md       <- "FastAPI 라우터, Pydantic 스키마"
+  ├── auth/CLAUDE.md      <- "JWT 토큰 생성/검증, 비밀번호 해싱"
+  └── persistence/CLAUDE.md <- "SQLAlchemy 모델, Repository 클래스"
+```
+
+**Plan 없이 실행한 경우와의 차이:**
+
+| 항목 | Plan 없이 `/init-project` | Plan 후 `/init-project` |
+|------|--------------------------|------------------------|
+| CLAUDE.md Overview | 사용자에게 질문 후 작성 | Plan 논의 내용에서 자동 추출 |
+| 모듈 구조 | 기본값 (api, persistence) | Plan에서 합의한 구조 (api, auth, persistence 등) |
+| architecture.md | 빈 템플릿 또는 기본 내용 | Data Flow, Components 사전 작성 |
+| ADR | 생성 안 됨 | Plan에서 내린 결정들 ADR로 자동 생성 |
+
 ---
 
 ## Features
