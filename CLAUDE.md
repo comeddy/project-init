@@ -1,0 +1,85 @@
+# Project Context
+
+## Overview
+**project-init** is a Claude Code plugin marketplace that provides project structure initialization, documentation quality scoring, and auto-sync workflows. The main plugin lives in `plugins/project-init/`.
+
+## Tech Stack
+- Claude Code Plugin System (commands, skills, agents as Markdown/YAML)
+- Bash (hook scripts, setup scripts)
+- Git (version control, commit-msg hooks)
+- Markdown (all plugin definitions, documentation, templates)
+
+## Project Structure
+```
+plugins/project-init/     - Main plugin source
+  .claude-plugin/         - Plugin manifest (plugin.json)
+  commands/               - Slash commands (init-project, sync-docs, add-adr, etc.)
+  agents/                 - Agent definitions (doc-sync-checker)
+  skills/project-scaffolder/ - Scaffolding skill with reference templates
+.claude/                  - Claude Code settings and project hooks
+  hooks/                  - PostToolUse, PreCommit, SessionStart hooks
+  skills/                 - Project-level skills (code-review, refactor, release)
+  commands/               - Project-level slash commands (review, test-all, deploy)
+  agents/                 - Project-level agents (code-reviewer, security-auditor)
+docs/                     - Architecture docs, ADRs, runbooks
+  decisions/              - Architecture Decision Records
+  runbooks/               - Operational runbooks
+scripts/                  - Setup and deployment scripts
+tools/prompts/            - Prompt templates
+.claude-plugin/           - Marketplace manifest (marketplace.json)
+img/                      - Images and assets
+.github/                  - GitHub issue/PR templates
+```
+
+## Conventions
+- **Language**: Bilingual (Korean/English) for README, CHANGELOG, architecture docs
+- **Plugin structure**: Commands are `.md` files with frontmatter; agents are `.md` or `.yml`
+- **Reference templates**: Stored in `skills/project-scaffolder/references/` as Markdown with embedded code blocks
+- **Versioning**: Semantic versioning; version tracked in `marketplace.json` and `plugin.json`
+- **Commit messages**: Co-Authored-By lines auto-removed by commit-msg hook
+- **Indentation**: 2 spaces (see `.editorconfig`)
+- **Line endings**: LF
+
+## Key Commands
+```bash
+# Plugin management
+claude plugin marketplace add ./project-init
+claude plugin install project-init
+
+# Plugin commands (run inside Claude Code)
+/init-project          # Initialize project structure
+/sync-docs             # Synchronize documentation
+/add-adr               # Create Architecture Decision Record
+/add-module            # Add new module with CLAUDE.md
+/add-runbook           # Create operational runbook
+/health-check          # Validate project setup
+
+# Scripts
+bash scripts/setup.sh           # Project setup for new developers
+bash scripts/install-hooks.sh   # Install Git hooks
+```
+
+---
+
+## Auto-Sync Rules
+
+Rules below are applied automatically after Plan mode exit and on major code changes.
+
+### Post-Plan Mode Actions
+After exiting Plan mode (`/plan`), before starting implementation:
+
+1. **Architecture decision made** -> Update `docs/architecture.md`
+2. **Technical choice/trade-off made** -> Create `docs/decisions/ADR-NNN-title.md`
+3. **New module added** -> Create `CLAUDE.md` in that module directory
+4. **Operational procedure defined** -> Create runbook in `docs/runbooks/`
+5. **Changes needed in this file** -> Update relevant sections above
+
+### Code Change Sync Rules
+- New directory under `plugins/` -> Must create `CLAUDE.md` alongside
+- Plugin command added/changed -> Update `plugins/project-init/CLAUDE.md`
+- Reference template changed -> Update relevant command documentation
+- Hook script changed -> Update `docs/architecture.md` Hooks section
+
+### ADR Numbering
+Find the highest number in `docs/decisions/ADR-*.md` and increment by 1.
+Format: `ADR-NNN-concise-title.md`

@@ -20,5 +20,8 @@ __pycache__/
 *.pyc
 .venv/
 
+# Environment
+.env
+
 # Logs
 *.log
