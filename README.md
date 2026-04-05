@@ -135,6 +135,30 @@ Run a planning session before initialization to generate a context-aware project
 | architecture.md | Empty template | Pre-filled with data flow and components |
 | ADRs | Not created | Auto-created from decisions |
 
+### Recommended Workflow (with Superpowers)
+
+The most effective workflow is to run `/init-project` **after implementation**, not before. When code already exists, the plugin's auto-detection produces far more accurate results.
+
+```
+1. /brainstorm        → Explore requirements, design, and trade-offs
+2. /write-plan        → Create a concrete implementation plan
+3. /execute-plan      → Implement the code
+4. /init-project      → Generate documentation and maintenance infrastructure
+5. /sync-docs         → Verify quality scores and fill gaps
+```
+
+**Why this order works better:**
+
+| What /init-project generates | Before code exists | After code exists |
+|-----|-----|-----|
+| CLAUDE.md | Guesses based on user input | Reflects actual structure |
+| architecture.md | Empty template | Real components and data flows |
+| Module CLAUDE.md | Planned directories | Actual directories |
+| Hooks (doc-sync) | Watch paths unclear | Precise path monitoring |
+| Commands (test-all) | Framework guessed | Exact test commands |
+
+`/init-project` is most valuable as a **"project maturation"** step — wrapping working code with documentation, hooks, and maintenance tooling. The plugin's adaptive detection (reading `package.json`, `go.mod`, directory layout) is maximized when real code is present.
+
 ### Commands Reference
 
 | Command | Description |
@@ -471,6 +495,30 @@ $ /sync-docs
 | 모듈 구조 | 기본값 (api, persistence) | 합의한 구조 (api, auth, persistence 등) |
 | architecture.md | 빈 템플릿 | Data Flow, Components 사전 작성 |
 | ADR | 생성 안 됨 | 논의한 결정으로 자동 생성 |
+
+### 권장 워크플로우 (Superpowers 연계)
+
+가장 효과적인 워크플로우는 `/init-project`를 코드 구현 **이후에** 실행하는 것입니다. 실제 코드가 존재할 때 플러그인의 자동 감지가 훨씬 정확한 결과를 생성합니다.
+
+```
+1. /brainstorm        → 요구사항, 설계, 트레이드오프 탐색
+2. /write-plan        → 구체적인 구현 계획 수립
+3. /execute-plan      → 코드 구현
+4. /init-project      → 문서화 및 유지보수 인프라 구축
+5. /sync-docs         → 품질 점수 확인 및 보완
+```
+
+**왜 이 순서가 더 효과적인가:**
+
+| /init-project 생성물 | 코드 구현 전 | 코드 구현 후 |
+|-----|-----|-----|
+| CLAUDE.md | 사용자 입력 기반 추측 | 실제 구조 반영 |
+| architecture.md | 빈 템플릿 | 실제 컴포넌트와 데이터 흐름 |
+| Module CLAUDE.md | 계획된 디렉토리 | 실제 디렉토리 |
+| Hooks (doc-sync) | 감시 대상 불명확 | 정확한 경로 감시 |
+| Commands (test-all) | 프레임워크 추측 | 정확한 테스트 커맨드 |
+
+`/init-project`는 **"프로젝트 성숙화"** 단계로 가장 큰 가치를 발휘합니다 — 작동하는 코드를 문서, 훅, 유지보수 도구로 감싸는 역할입니다. 플러그인의 적응형 감지(`package.json`, `go.mod`, 디렉토리 레이아웃 읽기)는 실제 코드가 있을 때 최대로 활용됩니다.
 
 ### 커맨드 목록
 
