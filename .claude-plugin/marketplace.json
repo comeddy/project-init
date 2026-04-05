@@ -8,7 +8,7 @@
   "description": "Claude Code plugins for project initialization and documentation management",
   "owner": {
     "name": "whchoi98",
-    "email": "noreply@example.com"
+    "email": "whchoi98@gmail.com"
   },
   "plugins": [
     {
@@ -17,7 +17,7 @@
       "version": "2.0.0",
       "author": {
         "name": "whchoi98",
-        "email": "noreply@example.com"
+        "email": "whchoi98@gmail.com"
       },
       "source": "./plugins/project-init",
       "category": "productivity"
