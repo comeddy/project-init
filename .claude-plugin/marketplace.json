@@ -3,7 +3,7 @@
   "name": "project-init",
   "metadata": {
     "description": "Claude Code plugins for project initialization and documentation management",
-    "version": "1.0.0"
+    "version": "2.0.0"
   },
   "description": "Claude Code plugins for project initialization and documentation management",
   "owner": {

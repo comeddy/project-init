@@ -8,11 +8,19 @@ SECRETS_FOUND=0
 # Patterns to detect
 PATTERNS=(
     'AKIA[0-9A-Z]{16}'                          # AWS Access Key ID
-    '[A-Za-z0-9/+=]{40}'                         # AWS Secret Key (heuristic)
-    'sk-[A-Za-z0-9]{48}'                         # OpenAI API Key
-    'sk-ant-[A-Za-z0-9-]{95}'                    # Anthropic API Key
+    '(?<=aws_secret_access_key\s{0,5}[=:]\s{0,5})[A-Za-z0-9/+=]{40}' # AWS Secret Key (context-aware)
+    'sk-[A-Za-z0-9]{20}T3BlbkFJ[A-Za-z0-9]{20}' # OpenAI API Key
+    'sk-ant-[A-Za-z0-9-]{90,}'                   # Anthropic API Key
     'ghp_[A-Za-z0-9]{36}'                        # GitHub Personal Access Token
+    'gho_[A-Za-z0-9]{36}'                        # GitHub OAuth Token
+    'github_pat_[A-Za-z0-9_]{82}'                # GitHub Fine-grained PAT
     'xoxb-[0-9]+-[A-Za-z0-9]+'                   # Slack Bot Token
+    'xoxp-[0-9]+-[A-Za-z0-9]+'                   # Slack User Token
+    'sk_live_[A-Za-z0-9]{24,}'                   # Stripe Secret Key
+    'rk_live_[A-Za-z0-9]{24,}'                   # Stripe Restricted Key
+    'AIza[A-Za-z0-9_-]{35}'                      # Google API Key
+    'ya29\.[A-Za-z0-9_-]{50,}'                   # Google OAuth Token
+    'DefaultEndpointsProtocol=https;Account'     # Azure Connection String
     'password\s*[:=]\s*["\x27][^"\x27]{8,}'      # Password assignments
     'secret\s*[:=]\s*["\x27][^"\x27]{8,}'        # Secret assignments
     'api[_-]?key\s*[:=]\s*["\x27][^"\x27]{8,}'   # API key assignments

@@ -74,11 +74,19 @@ SECRETS_FOUND=0
 # Patterns to detect
 PATTERNS=(
     'AKIA[0-9A-Z]{16}'                          # AWS Access Key ID
-    '[A-Za-z0-9/+=]{40}'                         # AWS Secret Key (heuristic)
-    'sk-[A-Za-z0-9]{48}'                         # OpenAI API Key
-    'sk-ant-[A-Za-z0-9-]{95}'                    # Anthropic API Key
+    '(?<=aws_secret_access_key\s{0,5}[=:]\s{0,5})[A-Za-z0-9/+=]{40}' # AWS Secret Key (context-aware)
+    'sk-[A-Za-z0-9]{20}T3BlbkFJ[A-Za-z0-9]{20}' # OpenAI API Key
+    'sk-ant-[A-Za-z0-9-]{90,}'                   # Anthropic API Key
     'ghp_[A-Za-z0-9]{36}'                        # GitHub Personal Access Token
+    'gho_[A-Za-z0-9]{36}'                        # GitHub OAuth Token
+    'github_pat_[A-Za-z0-9_]{82}'                # GitHub Fine-grained PAT
     'xoxb-[0-9]+-[A-Za-z0-9]+'                   # Slack Bot Token
+    'xoxp-[0-9]+-[A-Za-z0-9]+'                   # Slack User Token
+    'sk_live_[A-Za-z0-9]{24,}'                   # Stripe Secret Key
+    'rk_live_[A-Za-z0-9]{24,}'                   # Stripe Restricted Key
+    'AIza[A-Za-z0-9_-]{35}'                      # Google API Key
+    'ya29\.[A-Za-z0-9_-]{50,}'                   # Google OAuth Token
+    'DefaultEndpointsProtocol=https;Account'     # Azure Connection String
     'password\s*[:=]\s*["\x27][^"\x27]{8,}'      # Password assignments
     'secret\s*[:=]\s*["\x27][^"\x27]{8,}'        # Secret assignments
     'api[_-]?key\s*[:=]\s*["\x27][^"\x27]{8,}'   # API key assignments
@@ -122,10 +130,15 @@ fi
 | Pattern | Detects |
 |---------|---------|
 | `AKIA[0-9A-Z]{16}` | AWS Access Key IDs |
-| `sk-[A-Za-z0-9]{48}` | OpenAI API Keys |
+| `aws_secret_access_key...` | AWS Secret Keys (context-aware) |
+| `sk-...T3BlbkFJ...` | OpenAI API Keys |
 | `sk-ant-...` | Anthropic API Keys |
-| `ghp_...` | GitHub Personal Access Tokens |
-| `xoxb-...` | Slack Bot Tokens |
+| `ghp_...`, `gho_...`, `github_pat_...` | GitHub Tokens (PAT, OAuth, Fine-grained) |
+| `xoxb-...`, `xoxp-...` | Slack Tokens (Bot, User) |
+| `sk_live_...`, `rk_live_...` | Stripe Keys (Secret, Restricted) |
+| `AIza...` | Google API Keys |
+| `ya29....` | Google OAuth Tokens |
+| `DefaultEndpointsProtocol=...` | Azure Connection Strings |
 | `password\s*[:=]` | Hardcoded passwords |
 | `api[_-]?key\s*[:=]` | Hardcoded API keys |
 
