@@ -46,6 +46,33 @@ claude plugin install project-init
 
 After installation, restart your Claude Code session.
 
+## Update
+
+If you already have project-init installed and want to update to the latest version:
+
+```bash
+# Update the marketplace (fetches latest from GitHub)
+claude plugin marketplace update project-init
+
+# Reinstall the plugin (refreshes cached files)
+claude plugin install project-init@project-init
+
+# Restart Claude Code to apply
+```
+
+To verify the update:
+
+```bash
+claude plugin list | grep project-init
+# Should show: project-init@project-init  Version: 2.0.0
+```
+
+### Applying v2.0.0 Features to Existing Projects
+
+If your project was initialized with v1.0.0, run `/init-project .` in the project directory. It detects existing files and only creates what is missing (new hooks, commands, agents, scripts, templates).
+
+For `settings.json`, which is not overwritten automatically, see the [Troubleshooting](#troubleshooting) section.
+
 ## Usage
 
 ```bash
@@ -112,19 +139,41 @@ Run a planning session before initialization to generate a context-aware project
 
 | Command | Description |
 |---------|-------------|
-| `/init-project [path]` | Initialize a Claude Code project structure. Detects existing projects and adapts. |
-| `/sync-docs` | Synchronize all documentation with current code state. Includes quality scoring. |
-| `/add-module <path>` | Add a new module directory with CLAUDE.md and update architecture docs. |
-| `/add-runbook <name>` | Create an operational runbook from template with structured steps. |
-| `/add-adr <title>` | Create an Architecture Decision Record with auto-numbering. |
-| `/health-check` | Validate entire project setup and report health score (0-200). |
+| `/project-init:init-project [path]` | Initialize a Claude Code project structure (14 steps). Detects existing projects and adapts. |
+| `/project-init:sync-docs` | Synchronize all documentation with quality scoring, runbook audit, and anti-pattern detection. |
+| `/project-init:add-module <path>` | Add a new module directory with CLAUDE.md and update architecture docs. |
+| `/project-init:add-runbook <name>` | Create an operational runbook with verification and rollback sections. |
+| `/project-init:add-adr <title>` | Create an Architecture Decision Record with auto-numbering. |
+| `/project-init:health-check` | Validate entire project setup and report health score (0-200, A-F grade). |
+
+### Command Details
+
+**`/project-init:init-project [path]`** -- 14-step project initialization
+
+Generates a complete Claude Code project structure with CLAUDE.md, hooks (5 scripts), skills (4), slash commands (3), agents (2), docs templates, MCP config, and operational scripts. Detects existing projects (Node.js, Python, Go, Rust, Java/Kotlin) and adapts without overwriting.
+
+**`/project-init:sync-docs`** -- 8-phase documentation synchronization
+
+Phase 0: Gap analysis (doc-sync-checker subagent) | Phase 1: CLAUDE.md quality scoring | Phase 2: Root CLAUDE.md sync | Phase 3: Architecture doc sync (ASCII diagrams, layer-based) | Phase 4: Module CLAUDE.md audit | Phase 5: ADR audit with freshness check | Phase 6: Runbook audit | Phase 7: README sync | Phase 8: Before/After report
+
+**`/project-init:add-runbook <name>`** -- Operational runbook creation
+
+Creates `docs/runbooks/<name>.md` with structured sections: Overview, When to Use, Prerequisites, Procedure (copy-paste ready commands), Verification checklist, Rollback steps. Updates architecture.md and root CLAUDE.md cross-references.
+
+**`/project-init:add-adr <title>`** -- Architecture Decision Record
+
+Creates `docs/decisions/ADR-NNN-<title>.md` with auto-numbering. Includes Context, Options Considered (with pros/cons), Decision, and Consequences (positive/negative). Cross-references architecture.md and root CLAUDE.md.
+
+**`/project-init:health-check`** -- Project health validation
+
+Scores project setup across 8 categories: Core files (20pts), Hook configuration (35pts), Skills (20pts), Documentation coverage (20pts), Security (25pts), CLAUDE.md quality (30pts), Tests structure (10pts). Grades: A (160-200), B (120-159), C (80-119), D (40-79), F (0-39).
 
 ### Skills and Agents
 
 | Type | Name | Invocation | Role |
 |------|------|-----------|------|
 | Skill | `project-scaffolder` | Auto-referenced by Claude | Project structure patterns and conventions |
-| Agent | `doc-sync-checker` | Spawned as subagent (model: opus) | Documentation gap analysis and quality scoring |
+| Agent | `doc-sync-checker` | Spawned as subagent (model: opus) | Documentation gap analysis, quality scoring, anti-pattern detection |
 
 ## Project Structure
 
@@ -334,6 +383,33 @@ claude plugin install project-init
 
 설치 후 Claude Code 세션을 재시작합니다.
 
+## 업데이트
+
+이미 project-init이 설치되어 있고 최신 버전으로 업데이트하려면:
+
+```bash
+# 마켓플레이스 갱신 (GitHub에서 최신 코드 가져오기)
+claude plugin marketplace update project-init
+
+# 플러그인 재설치 (캐시 파일 갱신)
+claude plugin install project-init@project-init
+
+# Claude Code 재시작
+```
+
+업데이트 확인:
+
+```bash
+claude plugin list | grep project-init
+# 결과: project-init@project-init  Version: 2.0.0
+```
+
+### 기존 프로젝트에 v2.0.0 기능 적용
+
+v1.0.0으로 초기화한 프로젝트에서 `/init-project .`을 실행합니다. 기존 파일을 감지하여 없는 것만 새로 생성합니다 (새 훅, 커맨드, 에이전트, 스크립트, 템플릿).
+
+`settings.json`은 자동 덮어쓰지 않으므로 [문제 해결](#문제-해결) 섹션을 참고합니다.
+
 ## 사용법
 
 ```bash
@@ -400,19 +476,41 @@ $ /sync-docs
 
 | 커맨드 | 설명 |
 |--------|------|
-| `/init-project [path]` | Claude Code 프로젝트 구조를 초기화합니다. 기존 프로젝트를 감지하여 적응합니다. |
-| `/sync-docs` | 모든 문서를 현재 코드 상태와 동기화합니다. 품질 점수를 포함합니다. |
-| `/add-module <path>` | 새 모듈 디렉토리를 생성하고 CLAUDE.md와 아키텍처 문서를 업데이트합니다. |
-| `/add-runbook <name>` | 운영 런북을 템플릿 기반으로 생성합니다. |
-| `/add-adr <title>` | 아키텍처 결정 기록(ADR)을 자동 번호 부여로 생성합니다. |
-| `/health-check` | 전체 프로젝트 설정을 검증하고 건강 점수(0-200)를 보고합니다. |
+| `/project-init:init-project [path]` | Claude Code 프로젝트 구조를 초기화합니다 (14단계). 기존 프로젝트를 감지하여 적응합니다. |
+| `/project-init:sync-docs` | 모든 문서를 동기화합니다. 품질 점수, 런북 감사, 안티패턴 감지를 포함합니다. |
+| `/project-init:add-module <path>` | 새 모듈 디렉토리를 생성하고 CLAUDE.md와 아키텍처 문서를 업데이트합니다. |
+| `/project-init:add-runbook <name>` | 검증 및 롤백 섹션을 포함한 운영 런북을 생성합니다. |
+| `/project-init:add-adr <title>` | 자동 번호 부여로 아키텍처 결정 기록(ADR)을 생성합니다. |
+| `/project-init:health-check` | 전체 프로젝트 설정을 검증하고 건강 점수(0-200, A-F 등급)를 보고합니다. |
+
+### 커맨드 상세
+
+**`/project-init:init-project [path]`** -- 14단계 프로젝트 초기화
+
+CLAUDE.md, 훅(5개 스크립트), 스킬(4개), 슬래시 커맨드(3개), 에이전트(2개), 문서 템플릿, MCP 설정, 운영 스크립트를 포함하는 완전한 Claude Code 프로젝트 구조를 생성합니다. 기존 프로젝트(Node.js, Python, Go, Rust, Java/Kotlin)를 감지하여 덮어쓰지 않고 적응합니다.
+
+**`/project-init:sync-docs`** -- 8단계 문서 동기화
+
+Phase 0: 갭 분석 (doc-sync-checker 서브에이전트) | Phase 1: CLAUDE.md 품질 점수 | Phase 2: 루트 CLAUDE.md 동기화 | Phase 3: 아키텍처 문서 동기화 (ASCII 다이어그램, 레이어 기반) | Phase 4: 모듈 CLAUDE.md 감사 | Phase 5: ADR 감사 및 최신성 검사 | Phase 6: 런북 감사 | Phase 7: README 동기화 | Phase 8: Before/After 리포트
+
+**`/project-init:add-runbook <name>`** -- 운영 런북 생성
+
+`docs/runbooks/<name>.md`를 구조화된 섹션으로 생성합니다: 개요, 사용 시점, 사전 요구 사항, 절차 (복사-붙여넣기 가능한 명령어), 검증 체크리스트, 롤백 절차. architecture.md와 루트 CLAUDE.md에 교차 참조를 업데이트합니다.
+
+**`/project-init:add-adr <title>`** -- 아키텍처 결정 기록
+
+`docs/decisions/ADR-NNN-<title>.md`를 자동 번호 부여로 생성합니다. 컨텍스트, 고려한 옵션(장단점 포함), 결정, 결과(긍정/부정)를 포함합니다. architecture.md와 루트 CLAUDE.md에 교차 참조를 업데이트합니다.
+
+**`/project-init:health-check`** -- 프로젝트 건강 검진
+
+8개 카테고리로 프로젝트 설정을 점수화합니다: 핵심 파일(20점), 훅 설정(35점), 스킬(20점), 문서 커버리지(20점), 보안(25점), CLAUDE.md 품질(30점), 테스트 구조(10점). 등급: A (160-200), B (120-159), C (80-119), D (40-79), F (0-39).
 
 ### 스킬 및 에이전트
 
 | 유형 | 이름 | 호출 방식 | 역할 |
 |------|------|----------|------|
 | 스킬 | `project-scaffolder` | Claude가 대화 중 자동 참조 | 프로젝트 구조 패턴과 컨벤션 지식 |
-| 에이전트 | `doc-sync-checker` | 서브에이전트로 병렬 실행 (model: opus) | 문서 갭 분석 및 품질 점수 평가 |
+| 에이전트 | `doc-sync-checker` | 서브에이전트로 병렬 실행 (model: opus) | 문서 갭 분석, 품질 점수 평가, 안티패턴 감지 |
 
 ## 프로젝트 구조
 
