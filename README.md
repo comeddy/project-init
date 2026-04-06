@@ -51,6 +51,20 @@ In short, project-init is a **harness engineering automation tool** — it gener
 
 ## Installation
 
+### Option A: GitHub URL (Recommended)
+
+```bash
+# Register the marketplace directly from GitHub
+claude plugin marketplace add https://github.com/whchoi98/project-init
+
+# Install the plugin
+claude plugin install project-init@project-init
+
+# Restart Claude Code session
+```
+
+### Option B: Local Clone
+
 ```bash
 # Clone the repository
 git clone https://github.com/whchoi98/project-init.git
@@ -59,37 +73,49 @@ git clone https://github.com/whchoi98/project-init.git
 claude plugin marketplace add ./project-init
 
 # Install the plugin
-claude plugin install project-init
-```
+claude plugin install project-init@project-init
 
-After installation, restart your Claude Code session.
+# Restart Claude Code session
+```
 
 ## Update
 
-If you already have project-init installed and want to update to the latest version:
-
 ```bash
-# Update the marketplace (fetches latest from GitHub)
+# Fetch latest from GitHub
 claude plugin marketplace update project-init
 
 # Reinstall the plugin (refreshes cached files)
 claude plugin install project-init@project-init
 
-# Restart Claude Code to apply
+# Restart Claude Code session
 ```
 
-To verify the update:
+### Applying Features to Existing Projects
 
-```bash
-claude plugin list | grep project-init
-# Should show: project-init@project-init  Version: 2.0.0
-```
-
-### Applying v2.0.0 Features to Existing Projects
-
-If your project was initialized with v1.0.0, run `/init-project .` in the project directory. It detects existing files and only creates what is missing (new hooks, commands, agents, scripts, templates).
+If your project was initialized with an older version, run `/init-project .` in the project directory. It detects existing files and only creates what is missing (new hooks, commands, agents, scripts, templates).
 
 For `settings.json`, which is not overwritten automatically, see the [Troubleshooting](#troubleshooting) section.
+
+## Uninstall
+
+```bash
+# Remove the plugin
+claude plugin uninstall project-init@project-init
+
+# Remove the marketplace registration
+claude plugin marketplace remove project-init
+```
+
+## Verify
+
+```bash
+# Check registered marketplaces
+claude plugin marketplace list
+
+# Check installed plugins
+claude plugin list | grep project-init
+# project-init@project-init  Version: 2.0.0  Status: ✔ enabled
+```
 
 ## Usage
 
@@ -452,6 +478,20 @@ Claude Code는 **하네스(Harness)** 위에서 동작합니다 — hooks, skill
 
 ## 설치 방법
 
+### 방법 A: GitHub URL (권장)
+
+```bash
+# GitHub에서 직접 마켓플레이스 등록
+claude plugin marketplace add https://github.com/whchoi98/project-init
+
+# 플러그인 설치
+claude plugin install project-init@project-init
+
+# Claude Code 세션 재시작
+```
+
+### 방법 B: 로컬 클론
+
 ```bash
 # 리포지토리 클론
 git clone https://github.com/whchoi98/project-init.git
@@ -460,37 +500,49 @@ git clone https://github.com/whchoi98/project-init.git
 claude plugin marketplace add ./project-init
 
 # 플러그인 설치
-claude plugin install project-init
-```
+claude plugin install project-init@project-init
 
-설치 후 Claude Code 세션을 재시작합니다.
+# Claude Code 세션 재시작
+```
 
 ## 업데이트
 
-이미 project-init이 설치되어 있고 최신 버전으로 업데이트하려면:
-
 ```bash
-# 마켓플레이스 갱신 (GitHub에서 최신 코드 가져오기)
+# GitHub에서 최신 코드 가져오기
 claude plugin marketplace update project-init
 
 # 플러그인 재설치 (캐시 파일 갱신)
 claude plugin install project-init@project-init
 
-# Claude Code 재시작
+# Claude Code 세션 재시작
 ```
 
-업데이트 확인:
+### 기존 프로젝트에 기능 적용
 
-```bash
-claude plugin list | grep project-init
-# 결과: project-init@project-init  Version: 2.0.0
-```
-
-### 기존 프로젝트에 v2.0.0 기능 적용
-
-v1.0.0으로 초기화한 프로젝트에서 `/init-project .`을 실행합니다. 기존 파일을 감지하여 없는 것만 새로 생성합니다 (새 훅, 커맨드, 에이전트, 스크립트, 템플릿).
+이전 버전으로 초기화한 프로젝트에서 `/init-project .`을 실행합니다. 기존 파일을 감지하여 없는 것만 새로 생성합니다 (새 훅, 커맨드, 에이전트, 스크립트, 템플릿).
 
 `settings.json`은 자동 덮어쓰지 않으므로 [문제 해결](#문제-해결) 섹션을 참고합니다.
+
+## 삭제
+
+```bash
+# 플러그인 제거
+claude plugin uninstall project-init@project-init
+
+# 마켓플레이스 등록 해제
+claude plugin marketplace remove project-init
+```
+
+## 확인
+
+```bash
+# 등록된 마켓플레이스 목록
+claude plugin marketplace list
+
+# 설치된 플러그인 확인
+claude plugin list | grep project-init
+# project-init@project-init  Version: 2.0.0  Status: ✔ enabled
+```
 
 ## 사용법
 
