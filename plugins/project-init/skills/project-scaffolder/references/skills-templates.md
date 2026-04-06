@@ -244,6 +244,25 @@ Rate each issue 0-100. Only report issues with confidence >= 75.
 
 Present findings in structured format with file paths, line numbers, and fix suggestions.
 If no high-confidence issues, confirm code meets standards.
+
+## Error Recovery
+
+### If no changes found (Step 1)
+No diff output means nothing to review. Inform the user:
+- Check if changes are committed: `git log -1 --oneline`
+- Check if on the right branch: `git branch --show-current`
+- Suggest specifying files directly: `/review path/to/file`
+
+### If CLAUDE.md is missing or empty (Step 2)
+Cannot evaluate project guidelines without CLAUDE.md. Suggest:
+- Run `/init-project` to generate CLAUDE.md
+- Or create a minimal CLAUDE.md with conventions section
+
+### If diff is too large (>500 lines)
+Focus on high-risk files first:
+1. Files with security-sensitive changes (hooks, scripts)
+2. Files with logic changes
+3. Documentation changes (lower priority)
 ```
 
 ---
@@ -302,6 +321,31 @@ Present:
 - Total tests run, passed, failed, skipped
 - Failed test details with file paths and error messages
 - Suggest fixes for failing tests if the cause is apparent
+
+## Error Recovery
+
+### If test runner itself fails
+\```bash
+bash -n tests/run-all.sh          # Check syntax
+ls -la tests/**/*.sh              # Check permissions
+chmod +x tests/**/*.sh            # Fix permissions
+\```
+
+### Common failure categories and fixes
+
+| Failure Pattern | Likely Cause | Fix |
+|---|---|---|
+| "file not found" | Missing file after restructure | Create file or update test |
+| "invalid JSON" | Malformed manifest | `python3 -m json.tool <file>` |
+| "Version mismatch" | Manifest versions diverged | Update both to same version |
+| "not executable" | Permission reset by git | `chmod +x` on affected files |
+| "bash syntax error" | Bad edit in script | `bash -n <file>` to locate error |
+
+### If many tests fail at once
+Likely a structural change broke multiple assumptions:
+1. `git log -1` — what was the last change?
+2. `git diff HEAD~1` — what specifically changed?
+3. Fix the root cause, not individual tests
 ```
 
 ---
@@ -351,4 +395,33 @@ Display:
 - Deployment method used
 - Verification results
 - Suggest creating a deployment runbook if none exists
+
+## Error Recovery
+
+### If pre-deploy checks fail (Step 1)
+\```bash
+git stash                         # Stash uncommitted changes
+git checkout main                 # Switch to main branch
+\```
+
+### If deployment fails (Step 2/3)
+Check deployment logs and retry:
+- Docker: `docker logs <container>`
+- SAM: `sam logs --stack-name <name>`
+- CDK: check CloudFormation console for rollback details
+
+### If a bad deployment was published — rollback
+\```bash
+# If using git tags for releases
+git push origin ":refs/tags/v$VERSION"
+git tag -d "v$VERSION"
+git revert HEAD
+git push origin main
+\```
+
+### If health check fails after deployment (Step 3)
+- Check service logs for startup errors
+- Verify environment variables are set
+- Confirm database migrations ran successfully
+- If unrecoverable, trigger rollback procedure above
 ```

@@ -19,7 +19,8 @@ Use this template for `.claude/settings.json`.
       "Bash(chmod 777:*)",
       "Bash(curl:* | bash)",
       "Bash(wget:* | bash)",
-      "Bash(eval:*)"
+      "Bash(eval:*)",
+      "Bash(python3 -c:*import os*)"
     ]
   },
   "hooks": {

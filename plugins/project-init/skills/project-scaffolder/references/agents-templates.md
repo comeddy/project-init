@@ -15,20 +15,44 @@ tools: Read, Glob, Grep, Bash(git diff:*), Bash(git log:*)
 model: sonnet
 color: green
 
-# Output Schema — agent MUST use this Markdown structure:
+# Output Schema
+#
+# The agent MUST return results in this exact Markdown structure:
 #
 # ## Code Review Report
-# **Scope:** <files or git ref> | **Files reviewed:** <N> | **Issues found:** <N> (filtered from <M>)
 #
-# #### [CRITICAL|IMPORTANT] <title> (confidence: <75-100>)
-# **File:** `<path>:<line>` | **Issue:** <desc> | **Fix:** <code suggestion>
+# **Scope:** <files reviewed or git ref>
+# **Files reviewed:** <N>
+# **Issues found:** <N above threshold> (filtered from <M total>)
+#
+# ### Issues
+#
+# #### [CRITICAL|IMPORTANT] <title> (confidence: <0-100>)
+# **File:** `<path>:<line>`
+# **Issue:** <description>
+# **Guideline:** <CLAUDE.md rule or standard>
+# **Fix:**
+# ```
+# <suggested code fix>
+# ```
+#
+# <!-- Repeat for each issue with confidence >= 75 -->
 #
 # ### Summary
 # | Severity | Count |
 # |----------|-------|
 # | Critical (90-100) | <N> |
 # | Important (75-89) | <N> |
-# **Verdict:** PASS | WARN | FAIL
+#
+# **Verdict:** PASS (no issues) | WARN (important only) | FAIL (critical found)
+#
+# If no issues >= 75 confidence:
+#
+# ## Code Review Report
+# **Scope:** <files reviewed>
+# **Files reviewed:** <N>
+# **Issues found:** 0 (filtered from <M total>)
+# **Verdict:** PASS — code meets project standards.
 ```
 
 ### Agent Behavior
@@ -45,23 +69,34 @@ The code-reviewer agent is spawned to review code in parallel without consuming 
    - Check code quality (duplication, complexity)
 4. Score each issue 0-100 confidence
 5. Filter to only issues >= 75 confidence
-6. Return structured report
+6. Return structured report with Verdict
 
-**Output format:**
+**Output example:**
 ```
 ## Code Review Report
 
-### Issues Found: N (filtered from M total)
+**Scope:** git diff HEAD~1
+**Files reviewed:** 3
+**Issues found:** 1 (filtered from 4 total)
+
+### Issues
 
 #### [CRITICAL] SQL injection in user input handling (confidence: 92)
-**File:** src/api/users.ts:45
+**File:** `src/api/users.ts:45`
 **Issue:** User input passed directly to SQL query without parameterization
-**Fix:** Use parameterized query: `db.query('SELECT * FROM users WHERE id = $1', [userId])`
+**Guideline:** OWASP Top 10 - A03:2021 Injection
+**Fix:**
+```sql
+db.query('SELECT * FROM users WHERE id = $1', [userId])
+```
 
 ### Summary
-- Files reviewed: X
-- Issues found (75+ confidence): N
-- Critical: X, Important: Y
+| Severity | Count |
+|----------|-------|
+| Critical (90-100) | 1 |
+| Important (75-89) | 0 |
+
+**Verdict:** FAIL (critical found)
 ```
 
 ---
@@ -77,24 +112,48 @@ tools: Read, Glob, Grep, Bash(find:*), Bash(git log:*), Bash(npm audit:*), Bash(
 model: sonnet
 color: red
 
-# Output Schema — agent MUST use this Markdown structure:
+# Output Schema
+#
+# The agent MUST return results in this exact Markdown structure:
 #
 # ## Security Audit Report
-# **Scope:** <dirs audited> | **Scan date:** <YYYY-MM-DD>
+#
+# **Scope:** <directories/files audited>
+# **Scan date:** <YYYY-MM-DD>
 #
 # ### Critical Issues
-# - **[SECRET|VULN]** <description> — `<file>:<line>`
+# - **[SECRET]** <description> — `<file>:<line>`
+# - **[VULN]** <description> — `<file>:<line>`
 #
 # ### Warnings
-# - **[DEP|CONFIG]** <description>
+# - **[DEP]** <description>
+# - **[CONFIG]** <description>
 #
 # ### Passed Checks
-# - [x] .env in .gitignore | - [x] No secrets in CLAUDE.md | - [ ] <failed check>
+# - [x] .env in .gitignore
+# - [x] No secrets in CLAUDE.md
+# - [x] No hardcoded credentials in source
+# - [ ] <failed check description>
+#
+# ### Recommendations
+# 1. <actionable recommendation>
+# 2. <actionable recommendation>
 #
 # ### Summary
 # | Category | Critical | Warning | Info |
 # |----------|----------|---------|------|
+# | Secrets  | <N>      | <N>     | <N>  |
+# | Vulnerabilities | <N> | <N>  | <N>  |
+# | Dependencies | <N>  | <N>     | <N>  |
+# | Configuration | <N> | <N>    | <N>  |
+#
 # **Verdict:** PASS | WARN | FAIL
+#
+# If no issues found:
+#
+# ## Security Audit Report
+# **Scope:** <directories audited>
+# **Verdict:** PASS — no security issues detected.
 ```
 
 ### Agent Behavior
@@ -104,6 +163,7 @@ The security-auditor agent performs a comprehensive security scan of the project
 **Tasks performed:**
 1. **Secret Detection**: Scan all files for hardcoded secrets, API keys, passwords
    - AWS keys (`AKIA...`), API keys (`sk-...`, `ghp_...`), passwords
+   - Stripe (`sk_live_...`), Google (`AIza...`), Azure connection strings
    - Check `.env` is in `.gitignore`
    - Verify `.env.example` has no real values
 2. **Dependency Audit**: Check for known vulnerabilities
@@ -125,25 +185,38 @@ The security-auditor agent performs a comprehensive security scan of the project
    - Verify no secrets in CLAUDE.md
    - Check security conventions are documented
 
-**Output format:**
+**Output example:**
 ```
 ## Security Audit Report
 
+**Scope:** Full project scan
+**Scan date:** 2026-04-06
+
 ### Critical Issues
-- [SECRET] Hardcoded API key found in src/config.ts:12
-- [VULN] SQL injection risk in src/api/users.ts:45
+- **[SECRET]** Hardcoded API key found — `src/config.ts:12`
+- **[VULN]** SQL injection risk — `src/api/users.ts:45`
 
 ### Warnings
-- [DEP] 3 dependencies with known vulnerabilities (npm audit)
-- [CONFIG] CORS allows all origins in production config
+- **[DEP]** 3 dependencies with known vulnerabilities (npm audit)
+- **[CONFIG]** CORS allows all origins in production config
+
+### Passed Checks
+- [x] .env in .gitignore
+- [x] No secrets in CLAUDE.md
+- [ ] No hardcoded credentials in source
 
 ### Recommendations
-- Add PreCommit hook for secret scanning
-- Update vulnerable dependencies
-- Restrict CORS to specific origins
+1. Rotate the exposed API key and store in .env
+2. Use parameterized queries for all database access
+3. Update vulnerable dependencies: `npm audit fix`
 
 ### Summary
-- Critical: X, Warnings: Y, Info: Z
-- Secret scan: PASS/FAIL
-- Dependency audit: X vulnerabilities
+| Category | Critical | Warning | Info |
+|----------|----------|---------|------|
+| Secrets  | 1        | 0       | 0    |
+| Vulnerabilities | 1 | 0      | 0    |
+| Dependencies | 0   | 3       | 0    |
+| Configuration | 0  | 1       | 0    |
+
+**Verdict:** FAIL
 ```

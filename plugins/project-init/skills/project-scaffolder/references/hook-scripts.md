@@ -10,20 +10,40 @@ This hook runs after Write/Edit operations and detects when documentation sync i
 #!/bin/bash
 # Detect documentation sync needs after file changes.
 # Triggered by PostToolUse (Write|Edit) events.
+# Walks parent directories to find CLAUDE.md before warning.
 
 FILE_PATH="${1:-}"
 [ -z "$FILE_PATH" ] && exit 0
 
-# Detect missing CLAUDE.md in src/ subdirectories
-if [[ "$FILE_PATH" == src/* ]] || [[ "$FILE_PATH" == app/* ]] || [[ "$FILE_PATH" == lib/* ]]; then
-    DIR=$(dirname "$FILE_PATH")
-    if [ ! -f "$DIR/CLAUDE.md" ] && [ "$DIR" != "src" ] && [ "$DIR" != "app" ] && [ "$DIR" != "lib" ]; then
-        echo "[doc-sync] $DIR/CLAUDE.md is missing. Create module documentation."
+# Detect source root directories (adapt per project)
+# Default: src/, app/, lib/  |  Plugin projects: plugins/
+SOURCE_ROOTS="src app lib plugins"
+
+for ROOT in $SOURCE_ROOTS; do
+    if [[ "$FILE_PATH" == ${ROOT}/* ]]; then
+        DIR=$(dirname "$FILE_PATH")
+        FOUND_CLAUDE=false
+        CHECK_DIR="$DIR"
+        while [ "$CHECK_DIR" != "$ROOT" ] && [ "$CHECK_DIR" != "." ]; do
+            if [ -f "$CHECK_DIR/CLAUDE.md" ]; then
+                FOUND_CLAUDE=true
+                break
+            fi
+            CHECK_DIR=$(dirname "$CHECK_DIR")
+        done
+        if ! $FOUND_CLAUDE && [ "$DIR" != "$ROOT" ]; then
+            echo "[doc-sync] $DIR/CLAUDE.md is missing. Create module documentation."
+        fi
+        break
     fi
-fi
+done
 
 # Alert if no ADRs exist when source or architecture files change
-if [[ "$FILE_PATH" == src/* ]] || [[ "$FILE_PATH" == docs/architecture.md ]]; then
+IS_SOURCE=false
+for ROOT in $SOURCE_ROOTS; do
+    [[ "$FILE_PATH" == ${ROOT}/* ]] && IS_SOURCE=true && break
+done
+if $IS_SOURCE || [[ "$FILE_PATH" == docs/architecture.md ]]; then
     ADR_COUNT=$(find docs/decisions -name 'ADR-*.md' -not -name '.template.md' 2>/dev/null | wc -l)
     if [ "$ADR_COUNT" -eq 0 ]; then
         echo "[doc-sync] No ADRs found. Record architectural decisions."
@@ -43,9 +63,11 @@ fi
 
 | Trigger | Condition | Message |
 |---------|-----------|---------|
-| File edited under `src/`, `app/`, or `lib/` | Directory has no `CLAUDE.md` | Prompts to create module doc |
-| File edited under `src/` or `docs/architecture.md` | No ADR files exist | Prompts to record decisions |
+| File edited under source root | No `CLAUDE.md` in dir or any parent up to root | Prompts to create module doc |
+| Source file or `docs/architecture.md` edited | No ADR files exist | Prompts to record decisions |
 | Infrastructure file edited | No runbook files exist | Prompts to create runbooks |
+
+**Parent directory walking**: Instead of only checking the immediate directory, the hook walks up the directory tree. If `src/api/handlers/user.ts` is edited, it checks `src/api/handlers/`, then `src/api/`, then stops at the source root. This prevents false warnings when a parent directory already has `CLAUDE.md`.
 
 ### Installation
 

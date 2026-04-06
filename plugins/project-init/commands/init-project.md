@@ -238,17 +238,42 @@ git add -A
 git commit -m "Initial project structure for Claude Code"
 ```
 
-## Step 14: Summary
+## Step 14: Generate Test Framework
+
+Read [references/tests-templates.md](../skills/project-scaffolder/references/tests-templates.md) and create:
+
+```bash
+mkdir -p tests/hooks tests/structure tests/fixtures
+```
+
+- `tests/run-all.sh` - Test runner with TAP-style output and assertion functions
+- `tests/hooks/test-hooks.sh` - Hook existence, permissions, registration, behavior
+- `tests/hooks/test-secret-patterns.sh` - Secret pattern true positive / false positive tests
+- `tests/structure/test-plugin-structure.sh` - Manifest validation, version sync, file existence
+- `tests/fixtures/secret-samples.txt` - True positive samples
+- `tests/fixtures/false-positives.txt` - False positive samples
+
+**For existing projects**: Adapt structure tests to validate the actual project's files, manifests, and CLAUDE.md sections.
+
+Make test runner executable:
+
+```bash
+chmod +x tests/run-all.sh tests/hooks/*.sh tests/structure/*.sh
+```
+
+## Step 15: Summary
 
 Display the created structure and explain the auto-sync mechanisms:
 
 1. **CLAUDE.md Auto-Sync Rules** - Plan mode exit triggers doc updates
-2. **Hook (check-doc-sync.sh)** - Write/Edit triggers missing doc detection
+2. **Hook (check-doc-sync.sh)** - Write/Edit triggers missing doc detection (with parent-dir walking)
 3. **Hook (secret-scan.sh)** - PreCommit blocks commits containing secrets
 4. **Hook (session-context.sh)** - Session start loads project context
 5. **Hook (commit-msg)** - Auto-removes Co-Authored-By lines (AI contributor exclusion)
 6. **Skill (/sync-docs)** - Manual full documentation sync with quality scoring
-7. **Commands (/review, /test-all, /deploy)** - Common development workflows
-8. **Agents (code-reviewer, security-auditor)** - Parallel analysis agents
+7. **Commands (/review, /test-all, /deploy)** - Common development workflows with error recovery
+8. **Agents (code-reviewer, security-auditor)** - Parallel analysis agents with structured output schemas
+9. **Test Suite (tests/run-all.sh)** - Automated harness validation
+10. **Deny List (settings.json)** - Dangerous commands explicitly blocked
 
 If existing project was detected, highlight what was adapted vs created fresh.
