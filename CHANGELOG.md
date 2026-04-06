@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Automated test framework (`tests/run-all.sh`) with 113 tests across 3 categories: hooks (27), secret patterns (22), structure (64)
+- Automated test framework (`tests/run-all.sh`) with 114 tests across 3 categories: hooks (27), secret patterns (22), structure (65)
 - Test fixture files for secret pattern validation (true positives and false positives)
 - Error recovery sections in all generated commands: `/deploy` (5 scenarios including full rollback), `/review` (3 scenarios), `/test-all` (failure pattern table + multi-failure diagnosis)
 - Structured output schemas for agents: `code-reviewer` (Verdict: PASS/WARN/FAIL, Summary table, Guideline field) and `security-auditor` (category breakdown, Recommendations section, Passed Checks checklist)
@@ -35,6 +35,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **`PreCommit` → `PreToolUse`**: `PreCommit` is not a valid Claude Code hook event; replaced with `PreToolUse` (matcher: `Bash`) across all templates, commands, and documentation (15 files)
+- **Invalid deny pattern**: `Bash(python3 -c:*import os*)` — `:*` mid-pattern breaks Claude Code's parser; fixed to `Bash(python3 -c*import os*)`
+- Template count references updated from 8 to 9 in architecture.md, SKILL.md, onboarding.md, and structure tests
+- Phantom `scripts/deploy.sh` reference removed from architecture.md (file doesn't exist in this repo)
+- Empty `tools/prompts/` removed from CLAUDE.md project structure
 - Version mismatch between `marketplace.json` (1.0.0) and `plugin.json` (2.0.0)
 - `check-doc-sync.sh` false warnings for nested directories where parent has `CLAUDE.md`
 - Secret scan false positives from overly broad AWS Secret Key pattern
@@ -121,7 +126,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- 자동화된 테스트 프레임워크(`tests/run-all.sh`) 추가: 3개 카테고리 113개 테스트 (훅 27, 시크릿 패턴 22, 구조 64)
+- 자동화된 테스트 프레임워크(`tests/run-all.sh`) 추가: 3개 카테고리 114개 테스트 (훅 27, 시크릿 패턴 22, 구조 65)
 - 시크릿 패턴 검증용 테스트 픽스처 파일 추가 (True Positive / False Positive)
 - 모든 생성 커맨드에 에러 복구 섹션 추가: `/deploy` (전체 롤백 포함 5개 시나리오), `/review` (3개 시나리오), `/test-all` (실패 패턴 표 + 다중 실패 진단)
 - 에이전트 구조화된 출력 스키마 추가: `code-reviewer` (Verdict, Summary 테이블, Guideline 필드), `security-auditor` (카테고리별 분류, Recommendations, Passed Checks 체크리스트)
@@ -142,6 +147,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **`PreCommit` → `PreToolUse`**: `PreCommit`은 유효한 Claude Code 훅 이벤트가 아님; 모든 템플릿, 커맨드, 문서에서 `PreToolUse` (matcher: `Bash`)로 교체 (15개 파일)
+- **잘못된 deny 패턴**: `Bash(python3 -c:*import os*)` — 패턴 중간의 `:*`가 Claude Code 파서를 깨뜨림; `Bash(python3 -c*import os*)`로 수정
+- 템플릿 수 참조를 8에서 9로 업데이트 (architecture.md, SKILL.md, onboarding.md, 구조 테스트)
+- architecture.md에서 존재하지 않는 `scripts/deploy.sh` 참조 제거
+- CLAUDE.md 프로젝트 구조에서 빈 `tools/prompts/` 제거
 - `marketplace.json` (1.0.0)과 `plugin.json` (2.0.0) 간 버전 불일치 수정
 - 부모 디렉토리에 `CLAUDE.md`가 있는데 하위 디렉토리에서 거짓 경고하는 `check-doc-sync.sh` 버그 수정
 - 지나치게 광범위한 AWS Secret Key 패턴으로 인한 시크릿 스캔 거짓 양성 수정

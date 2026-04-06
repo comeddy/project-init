@@ -39,7 +39,7 @@ In short, project-init is a **harness engineering automation tool** — it gener
 - **Confidence-Based Code Review** -- The generated `code-review` skill scores issues 0-100 and only reports those above 75, filtering out false positives.
 - **Security-First Hooks** -- PreToolUse secret scanning with 17+ patterns (AWS, Stripe, Google, Azure, GitHub, Slack) blocks commits containing secrets. Context-aware detection reduces false positives. The commit-msg hook removes AI Co-Authored-By lines automatically.
 - **Tool Scoping & Deny List** -- Generated `settings.json` enforces least-privilege tool permissions and blocks dangerous commands (`rm -rf`, `git push --force`, `eval`, `curl|bash`).
-- **Automated Test Framework** -- Generated projects include 113+ tests validating hook scripts, secret scan patterns (TP/FP), plugin structure, version consistency, and CLAUDE.md content.
+- **Automated Test Framework** -- Generated projects include 114+ tests validating hook scripts, secret scan patterns (TP/FP), plugin structure, version consistency, and CLAUDE.md content.
 - **Error Recovery Guides** -- Every generated command includes recovery procedures: deploy rollback (5 scenarios), review fallbacks (3 scenarios), test failure diagnosis table.
 - **Structured Agent Output** -- Generated agents return results in defined Markdown schemas with Verdict (PASS/WARN/FAIL), Summary tables, and actionable recommendations.
 - **Full Project Lifecycle** -- Generated projects include slash commands (/review, /test-all, /deploy), agent definitions (code-reviewer, security-auditor), MCP configuration, onboarding docs, and operational scripts.
@@ -360,6 +360,22 @@ Grades: A (90-100), B (70-89), C (50-69), D (30-49), F (0-29)
 - Focus on adding copy-paste ready commands (20 points) and architecture clarity (20 points) first
 - Run `/sync-docs` again after updates to see Before/After improvement
 
+**`settings.json` errors on session start ("Invalid key in record" or "Invalid permission rule")**
+- This was caused by two bugs fixed in v2.1: `PreCommit` (invalid hook event) and `Bash(python3 -c:*import os*)` (invalid deny pattern syntax)
+- If your project was initialized before v2.1, manually update `.claude/settings.json`:
+  ```diff
+  - "Bash(python3 -c:*import os*)"
+  + "Bash(python3 -c*import os*)"
+  ```
+  ```diff
+  - "PreCommit": [
+  -   { "matcher": "",
+  + "PreToolUse": [
+  +   { "matcher": "Bash",
+  ```
+- Valid hook events: `PreToolUse`, `PostToolUse`, `SessionStart`, `Stop`, `Notification`
+- Deny pattern `:*` is only valid at the end of a pattern (prefix matching)
+
 **`doc-sync-checker` agent timeout**
 - The agent runs on model: opus, which may take longer for large projects
 - For projects with 50+ source directories, the agent may need extra time
@@ -424,7 +440,7 @@ Claude Code는 **하네스(Harness)** 위에서 동작합니다 — hooks, skill
 - **confidence 기반 코드 리뷰** -- 생성되는 `code-review` 스킬은 이슈를 0-100점으로 평가하고, 75점 이상만 보고하여 거짓 양성을 필터링합니다.
 - **보안 우선 훅** -- 17개 이상의 패턴(AWS, Stripe, Google, Azure, GitHub, Slack)으로 시크릿을 감지하는 PreToolUse 스캐닝이 커밋을 차단합니다. 컨텍스트 기반 감지로 거짓 양성을 줄입니다. commit-msg 훅이 AI Co-Authored-By 라인을 자동 제거합니다.
 - **도구 범위 제한 및 Deny 목록** -- 생성되는 `settings.json`이 최소 권한 원칙을 적용하고, 위험한 명령어(`rm -rf`, `git push --force`, `eval`, `curl|bash`)를 차단합니다.
-- **자동화된 테스트 프레임워크** -- 생성 프로젝트에 훅 스크립트, 시크릿 스캔 패턴(TP/FP), 플러그인 구조, 버전 일관성, CLAUDE.md 내용을 검증하는 113개 이상의 테스트가 포함됩니다.
+- **자동화된 테스트 프레임워크** -- 생성 프로젝트에 훅 스크립트, 시크릿 스캔 패턴(TP/FP), 플러그인 구조, 버전 일관성, CLAUDE.md 내용을 검증하는 114개 이상의 테스트가 포함됩니다.
 - **에러 복구 가이드** -- 모든 생성 커맨드에 복구 절차가 포함됩니다: deploy 롤백(5개 시나리오), review 폴백(3개 시나리오), test 실패 진단 표.
 - **구조화된 에이전트 출력** -- 생성 에이전트가 정의된 Markdown 스키마로 결과를 반환합니다: Verdict (PASS/WARN/FAIL), Summary 테이블, 실행 가능한 권장 사항.
 - **전체 프로젝트 라이프사이클** -- 생성된 프로젝트에 슬래시 커맨드(/review, /test-all, /deploy), 에이전트 정의(code-reviewer, security-auditor), MCP 설정, 온보딩 문서, 운영 스크립트가 포함됩니다.
@@ -744,6 +760,22 @@ project/
 - 점수는 문서 완성도를 반영하며, 코드 품질과는 무관합니다
 - 복사-붙여넣기 가능한 명령어(20점)와 아키텍처 명확성(20점)을 먼저 보강합니다
 - 업데이트 후 다시 실행하면 Before/After 개선을 확인할 수 있습니다
+
+**`settings.json` 세션 시작 시 에러 ("Invalid key in record" 또는 "Invalid permission rule")**
+- v2.1에서 수정된 두 가지 버그가 원인: `PreCommit` (유효하지 않은 훅 이벤트)과 `Bash(python3 -c:*import os*)` (잘못된 deny 패턴 문법)
+- v2.1 이전에 초기화한 프로젝트는 `.claude/settings.json`을 수동 수정해야 합니다:
+  ```diff
+  - "Bash(python3 -c:*import os*)"
+  + "Bash(python3 -c*import os*)"
+  ```
+  ```diff
+  - "PreCommit": [
+  -   { "matcher": "",
+  + "PreToolUse": [
+  +   { "matcher": "Bash",
+  ```
+- 유효한 훅 이벤트: `PreToolUse`, `PostToolUse`, `SessionStart`, `Stop`, `Notification`
+- Deny 패턴에서 `:*`는 패턴 끝에서만 사용 가능합니다 (접두사 매칭)
 
 **`doc-sync-checker` 에이전트 타임아웃**
 - 에이전트는 model: opus로 실행되며, 대규모 프로젝트에서 시간이 더 걸릴 수 있습니다
