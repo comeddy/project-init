@@ -51,85 +51,77 @@ In short, project-init is a **harness engineering automation tool** — it gener
 
 ## Installation
 
-### Option A: GitHub URL (Recommended)
+### Install
 
-Terminal:
+From the terminal (shell):
 
 ```bash
 claude plugin marketplace add https://github.com/whchoi98/project-init
 claude plugin install project-init@project-init
 ```
 
-Claude Code (after restart):
+Or from inside a Claude Code session:
 
 ```
-/init-project .
+/plugin marketplace add https://github.com/whchoi98/project-init
+/plugin install project-init@project-init
 ```
 
-### Option B: Local Clone
+### Verify
 
-Terminal:
+From the terminal:
 
 ```bash
-git clone https://github.com/whchoi98/project-init.git
-claude plugin marketplace add ./project-init
+claude plugin list
+```
+
+Or from inside a Claude Code session:
+
+```
+/plugin list
+```
+
+### Update
+
+From the terminal:
+
+```bash
+claude plugin marketplace refresh
 claude plugin install project-init@project-init
 ```
 
-Claude Code (after restart):
+Or from inside a Claude Code session:
 
 ```
-/init-project .
+/plugin marketplace refresh
+/plugin install project-init@project-init
 ```
 
-## Verify
+### Uninstall
 
-Terminal:
+From the terminal:
 
 ```bash
-claude plugin marketplace list
-claude plugin list | grep project-init
-# project-init@project-init  Version: 2.0.0  Status: ✔ enabled
-```
-
-Claude Code:
-
-```
-/health-check
-```
-
-## Update
-
-Terminal:
-
-```bash
-claude plugin marketplace update project-init
-claude plugin install project-init@project-init
-```
-
-Claude Code (after restart):
-
-```
-/init-project .
-/sync-docs
-```
-
-> **Note:** `/init-project .` detects existing files and only creates what is missing. `settings.json` is not overwritten automatically — see [Troubleshooting](#troubleshooting) for manual migration steps.
-
-## Uninstall
-
-Terminal:
-
-```bash
-claude plugin uninstall project-init@project-init
+claude plugin remove project-init@project-init
 claude plugin marketplace remove project-init
 ```
 
-Claude Code (optional — remove generated files from project):
+Or from inside a Claude Code session:
+
+```
+/plugin remove project-init@project-init
+/plugin marketplace remove project-init
+```
+
+### From Source (For Development)
 
 ```bash
-rm -rf .claude/hooks .claude/skills .claude/commands .claude/agents .claude/settings.json
+git clone https://github.com/whchoi98/project-init.git
+cd project-init
+bash scripts/setup.sh
 ```
+
+> **Note:** After installation, restart your Claude Code session. `/init-project .` detects existing files and only creates what is missing. `settings.json` is not overwritten automatically — see [Troubleshooting](#troubleshooting) for manual migration steps.
 
 ## Usage
 
@@ -492,85 +484,77 @@ Claude Code는 **하네스(Harness)** 위에서 동작합니다 — hooks, skill
 
 ## 설치 방법
 
-### 방법 A: GitHub URL (권장)
+### 설치
 
-Terminal:
+터미널(shell)에서:
 
 ```bash
 claude plugin marketplace add https://github.com/whchoi98/project-init
 claude plugin install project-init@project-init
 ```
 
-Claude Code (재시작 후):
+또는 Claude Code 세션 내에서:
 
 ```
-/init-project .
+/plugin marketplace add https://github.com/whchoi98/project-init
+/plugin install project-init@project-init
 ```
 
-### 방법 B: 로컬 클론
+### 확인
 
-Terminal:
+터미널에서:
 
 ```bash
-git clone https://github.com/whchoi98/project-init.git
-claude plugin marketplace add ./project-init
+claude plugin list
+```
+
+또는 Claude Code 세션 내에서:
+
+```
+/plugin list
+```
+
+### 업데이트
+
+터미널에서:
+
+```bash
+claude plugin marketplace refresh
 claude plugin install project-init@project-init
 ```
 
-Claude Code (재시작 후):
+또는 Claude Code 세션 내에서:
 
 ```
-/init-project .
+/plugin marketplace refresh
+/plugin install project-init@project-init
 ```
 
-## 확인
+### 삭제
 
-Terminal:
+터미널에서:
 
 ```bash
-claude plugin marketplace list
-claude plugin list | grep project-init
-# project-init@project-init  Version: 2.0.0  Status: ✔ enabled
-```
-
-Claude Code:
-
-```
-/health-check
-```
-
-## 업데이트
-
-Terminal:
-
-```bash
-claude plugin marketplace update project-init
-claude plugin install project-init@project-init
-```
-
-Claude Code (재시작 후):
-
-```
-/init-project .
-/sync-docs
-```
-
-> **참고:** `/init-project .`은 기존 파일을 감지하여 없는 것만 생성합니다. `settings.json`은 자동 덮어쓰지 않으므로 수동 마이그레이션이 필요합니다 — [문제 해결](#문제-해결) 섹션을 참고합니다.
-
-## 삭제
-
-Terminal:
-
-```bash
-claude plugin uninstall project-init@project-init
+claude plugin remove project-init@project-init
 claude plugin marketplace remove project-init
 ```
 
-Claude Code (선택 — 프로젝트에서 생성된 파일 제거):
+또는 Claude Code 세션 내에서:
+
+```
+/plugin remove project-init@project-init
+/plugin marketplace remove project-init
+```
+
+### 소스에서 설치 (개발용)
 
 ```bash
-rm -rf .claude/hooks .claude/skills .claude/commands .claude/agents .claude/settings.json
+git clone https://github.com/whchoi98/project-init.git
+cd project-init
+bash scripts/setup.sh
 ```
+
+> **참고:** 설치 후 Claude Code 세션을 재시작합니다. `/init-project .`은 기존 파일을 감지하여 없는 것만 생성합니다. `settings.json`은 자동 덮어쓰지 않으므로 수동 마이그레이션이 필요합니다 — [문제 해결](#문제-해결) 섹션을 참고합니다.
 
 ## 사용법
 
