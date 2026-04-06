@@ -17,7 +17,7 @@ plugins/project-init/     - Main plugin source
   agents/                 - Agent definitions (doc-sync-checker)
   skills/project-scaffolder/ - Scaffolding skill with reference templates
 .claude/                  - Claude Code settings and project hooks
-  hooks/                  - PostToolUse, PreCommit, SessionStart hooks
+  hooks/                  - PostToolUse, PreToolUse, SessionStart, Notification hooks
   skills/                 - Project-level skills (code-review, refactor, release)
   commands/               - Project-level slash commands (review, test-all, deploy)
   agents/                 - Project-level agents (code-reviewer, security-auditor)
@@ -25,7 +25,6 @@ docs/                     - Architecture docs, ADRs, runbooks
   decisions/              - Architecture Decision Records
   runbooks/               - Operational runbooks
 scripts/                  - Setup and deployment scripts
-tools/prompts/            - Prompt templates
 .claude-plugin/           - Marketplace manifest (marketplace.json)
 img/                      - Images and assets
 .github/                  - GitHub issue/PR templates

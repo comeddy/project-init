@@ -32,7 +32,7 @@ assert_file_exists "Plugin skill: SKILL.md" "plugins/project-init/skills/project
 
 # --- Reference templates exist ---
 
-TEMPLATES=(claude-md-template docs-templates hook-scripts settings-json-template skills-templates agents-templates mcp-json-template scripts-templates)
+TEMPLATES=(claude-md-template docs-templates hook-scripts settings-json-template skills-templates agents-templates mcp-json-template scripts-templates tests-templates)
 for tmpl in "${TEMPLATES[@]}"; do
     assert_file_exists "Reference: $tmpl.md" "plugins/project-init/skills/project-scaffolder/references/$tmpl.md"
 done

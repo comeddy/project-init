@@ -36,7 +36,7 @@ ls .git/hooks/commit-msg 2>/dev/null
 
 Check `.claude/settings.json` has hook registrations:
 - PostToolUse hook for doc-sync: +10
-- PreCommit hook for secret scanning: +10
+- PreToolUse hook for secret scanning: +10
 - SessionStart hook: +5
 - commit-msg Git hook (Claude exclusion): +10
 
@@ -123,7 +123,7 @@ Present a comprehensive health report:
 | Hook | Type | Status |
 |------|------|--------|
 | check-doc-sync.sh | PostToolUse | OK / MISSING / NOT EXECUTABLE |
-| secret-scan.sh | PreCommit | OK / MISSING |
+| secret-scan.sh | PreToolUse | OK / MISSING |
 | session-context.sh | SessionStart | OK / MISSING |
 | commit-msg | Git Hook | OK / MISSING |
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Scan staged files for secrets before commit.
-# Triggered by PreCommit event.
+# Triggered by PreToolUse event (matcher: Bash).
 # Exit 1 to block the commit if secrets are found.
 
 SECRETS_FOUND=0

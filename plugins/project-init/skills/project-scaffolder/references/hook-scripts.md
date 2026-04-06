@@ -79,7 +79,7 @@ The hook is registered in `.claude/settings.json` under `hooks.PostToolUse`.
 
 ---
 
-## secret-scan.sh (PreCommit Hook)
+## secret-scan.sh (PreToolUse Hook)
 
 Path: `.claude/hooks/secret-scan.sh`
 
@@ -88,7 +88,7 @@ Scans staged files for secrets, API keys, and credentials before commit.
 ```bash
 #!/bin/bash
 # Scan staged files for secrets before commit.
-# Triggered by PreCommit event.
+# Triggered by PreToolUse event (matcher: Bash).
 # Exit 1 to block the commit if secrets are found.
 
 SECRETS_FOUND=0
@@ -170,7 +170,7 @@ fi
 chmod +x .claude/hooks/secret-scan.sh
 ```
 
-Registered in `.claude/settings.json` under `hooks.PreCommit`.
+Registered in `.claude/settings.json` under `hooks.PreToolUse` with matcher `Bash`.
 
 ---
 

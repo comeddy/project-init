@@ -13,7 +13,7 @@ Core plugin providing project structure initialization, documentation quality sc
 - `commands/health-check.md` - Project validation
 - `agents/doc-sync-checker.md` - Documentation sync analysis agent
 - `skills/project-scaffolder/SKILL.md` - Scaffolding skill definition
-- `skills/project-scaffolder/references/` - 8 template files for code generation
+- `skills/project-scaffolder/references/` - 9 template files for code generation
 
 ## Rules
 - All commands must have clear step-by-step instructions

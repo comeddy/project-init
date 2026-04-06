@@ -57,6 +57,7 @@ All generated files are based on templates in `plugins/project-init/skills/proje
 - `docs-templates.md` - Documentation templates
 - `scripts-templates.md` - Setup and deploy scripts
 - `mcp-json-template.md` - MCP server configuration
+- `tests-templates.md` - Test framework templates
 
 ### 4-Layer Auto-Sync
 1. **CLAUDE.md Auto-Sync Rules** - Plan mode exit triggers doc updates

@@ -37,7 +37,7 @@ In short, project-init is a **harness engineering automation tool** — it gener
 - **4-Layer Auto-Sync Workflow** -- Generated projects include Plan mode rules, PostToolUse hooks, the `/sync-docs` command, and a Git commit-msg hook, ensuring documentation stays current as code evolves.
 - **Plan Mode Integration** -- Run `/init-project` after a `/plan` session and the generated structure reflects all architectural decisions discussed, including pre-filled `architecture.md` and auto-created ADRs.
 - **Confidence-Based Code Review** -- The generated `code-review` skill scores issues 0-100 and only reports those above 75, filtering out false positives.
-- **Security-First Hooks** -- PreCommit secret scanning with 17+ patterns (AWS, Stripe, Google, Azure, GitHub, Slack) blocks commits containing secrets. Context-aware detection reduces false positives. The commit-msg hook removes AI Co-Authored-By lines automatically.
+- **Security-First Hooks** -- PreToolUse secret scanning with 17+ patterns (AWS, Stripe, Google, Azure, GitHub, Slack) blocks commits containing secrets. Context-aware detection reduces false positives. The commit-msg hook removes AI Co-Authored-By lines automatically.
 - **Tool Scoping & Deny List** -- Generated `settings.json` enforces least-privilege tool permissions and blocks dangerous commands (`rm -rf`, `git push --force`, `eval`, `curl|bash`).
 - **Automated Test Framework** -- Generated projects include 113+ tests validating hook scripts, secret scan patterns (TP/FP), plugin structure, version consistency, and CLAUDE.md content.
 - **Error Recovery Guides** -- Every generated command includes recovery procedures: deploy rollback (5 scenarios), review fallbacks (3 scenarios), test failure diagnosis table.
@@ -275,7 +275,7 @@ project/
 │   ├── settings.json                  # All hooks registered
 │   ├── hooks/
 │   │   ├── check-doc-sync.sh         # PostToolUse: doc sync detection
-│   │   ├── secret-scan.sh            # PreCommit: secret scanning
+│   │   ├── secret-scan.sh            # PreToolUse: secret scanning
 │   │   ├── session-context.sh        # SessionStart: context loading
 │   │   └── notify.sh                 # Notification: webhook alerts
 │   ├── commands/
@@ -422,7 +422,7 @@ Claude Code는 **하네스(Harness)** 위에서 동작합니다 — hooks, skill
 - **4단계 자동 동기화 워크플로우** -- 생성된 프로젝트에 Plan 모드 규칙, PostToolUse 훅, `/sync-docs` 커맨드, Git commit-msg 훅이 설치되어 코드 변경 시 문서가 자동으로 따라갑니다.
 - **Plan 모드 연동** -- `/plan` 세션 이후 `/init-project`를 실행하면 논의한 아키텍처 결정이 반영된 구조가 생성됩니다. `architecture.md`가 사전 작성되고 ADR이 자동 생성됩니다.
 - **confidence 기반 코드 리뷰** -- 생성되는 `code-review` 스킬은 이슈를 0-100점으로 평가하고, 75점 이상만 보고하여 거짓 양성을 필터링합니다.
-- **보안 우선 훅** -- 17개 이상의 패턴(AWS, Stripe, Google, Azure, GitHub, Slack)으로 시크릿을 감지하는 PreCommit 스캐닝이 커밋을 차단합니다. 컨텍스트 기반 감지로 거짓 양성을 줄입니다. commit-msg 훅이 AI Co-Authored-By 라인을 자동 제거합니다.
+- **보안 우선 훅** -- 17개 이상의 패턴(AWS, Stripe, Google, Azure, GitHub, Slack)으로 시크릿을 감지하는 PreToolUse 스캐닝이 커밋을 차단합니다. 컨텍스트 기반 감지로 거짓 양성을 줄입니다. commit-msg 훅이 AI Co-Authored-By 라인을 자동 제거합니다.
 - **도구 범위 제한 및 Deny 목록** -- 생성되는 `settings.json`이 최소 권한 원칙을 적용하고, 위험한 명령어(`rm -rf`, `git push --force`, `eval`, `curl|bash`)를 차단합니다.
 - **자동화된 테스트 프레임워크** -- 생성 프로젝트에 훅 스크립트, 시크릿 스캔 패턴(TP/FP), 플러그인 구조, 버전 일관성, CLAUDE.md 내용을 검증하는 113개 이상의 테스트가 포함됩니다.
 - **에러 복구 가이드** -- 모든 생성 커맨드에 복구 절차가 포함됩니다: deploy 롤백(5개 시나리오), review 폴백(3개 시나리오), test 실패 진단 표.
@@ -660,7 +660,7 @@ project/
 │   ├── settings.json                  # 전체 훅 등록
 │   ├── hooks/
 │   │   ├── check-doc-sync.sh         # PostToolUse: 문서 동기화 감지
-│   │   ├── secret-scan.sh            # PreCommit: 시크릿 스캐닝
+│   │   ├── secret-scan.sh            # PreToolUse: 시크릿 스캐닝
 │   │   ├── session-context.sh        # SessionStart: 컨텍스트 로딩
 │   │   └── notify.sh                 # Notification: 웹훅 알림
 │   ├── commands/

@@ -11,7 +11,7 @@
       "Bash(curl:* | bash)",
       "Bash(wget:* | bash)",
       "Bash(eval:*)",
-      "Bash(python3 -c:*import os*)"
+      "Bash(python3 -c*import os*)"
     ]
   },
   "hooks": {
@@ -26,9 +26,9 @@
         ]
       }
     ],
-    "PreCommit": [
+    "PreToolUse": [
       {
-        "matcher": "",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",

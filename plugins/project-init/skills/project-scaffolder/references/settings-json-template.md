@@ -20,7 +20,7 @@ Use this template for `.claude/settings.json`.
       "Bash(curl:* | bash)",
       "Bash(wget:* | bash)",
       "Bash(eval:*)",
-      "Bash(python3 -c:*import os*)"
+      "Bash(python3 -c*import os*)"
     ]
   },
   "hooks": {
@@ -35,9 +35,9 @@ Use this template for `.claude/settings.json`.
         ]
       }
     ],
-    "PreCommit": [
+    "PreToolUse": [
       {
-        "matcher": "",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
@@ -77,7 +77,7 @@ Use this template for `.claude/settings.json`.
 | Event | Hook Script | Purpose |
 |-------|-------------|---------|
 | `SessionStart` | `session-context.sh` | Load project context (type, branch, recent activity) at session start |
-| `PreCommit` | `secret-scan.sh` | Scan staged files for secrets and API keys before commit |
+| `PreToolUse` (Bash) | `secret-scan.sh` | Scan staged files for secrets and API keys before shell commands |
 | `PostToolUse` (Write/Edit) | `check-doc-sync.sh` | Detect missing CLAUDE.md, ADRs, and runbooks after file changes |
 | `Notification` | `notify.sh` | Send webhook notifications on significant events |
 

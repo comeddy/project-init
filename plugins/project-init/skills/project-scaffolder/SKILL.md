@@ -33,7 +33,7 @@ project-root/
 │   ├── settings.json              # Permissions and hooks configuration
 │   ├── hooks/
 │   │   ├── check-doc-sync.sh     # PostToolUse: Documentation sync detection
-│   │   ├── secret-scan.sh        # PreCommit: Secret detection gate
+│   │   ├── secret-scan.sh        # PreToolUse: Secret detection gate
 │   │   ├── session-context.sh    # SessionStart: Load project context
 │   │   └── notify.sh             # Notification: Webhook alerts
 │   ├── commands/
@@ -68,7 +68,7 @@ project-root/
 ### Auto-Sync Mechanisms
 1. **CLAUDE.md Auto-Sync Rules**: Embedded in root CLAUDE.md, triggered after Plan mode
 2. **PostToolUse Hook** (check-doc-sync.sh): Detects missing module docs after Write/Edit
-3. **PreCommit Hook** (secret-scan.sh): Blocks commits containing secrets
+3. **PreToolUse Hook** (secret-scan.sh): Scans for secrets before shell commands
 4. **SessionStart Hook** (session-context.sh): Loads project context at session start
 5. **Notification Hook** (notify.sh): Sends webhook alerts on events
 6. **Sync-docs Skill**: Manual full documentation synchronization
@@ -133,7 +133,7 @@ Grades: A (90-100), B (70-89), C (50-69), D (30-49), F (0-29)
 - Secrets: Never store in CLAUDE.md or committed files
 - `.env.example`: Use for environment variable templates (no real values)
 - `settings.local.json`: Add to `.gitignore` for local overrides
-- PreCommit hook: Enable secret scanning by default
+- PreToolUse hook: Enable secret scanning by default
 - MCP scope: Configure with minimum permissions only
 
 ### Existing Project Adaptation
@@ -155,3 +155,4 @@ For detailed templates, see:
 - [references/docs-templates.md](references/docs-templates.md) - Architecture, ADR, Runbook, Onboarding, API Reference, .env templates
 - [references/mcp-json-template.md](references/mcp-json-template.md) - MCP server configuration template
 - [references/scripts-templates.md](references/scripts-templates.md) - Setup, deploy, seed-db, install-hooks scripts
+- [references/tests-templates.md](references/tests-templates.md) - Test framework and harness validation templates

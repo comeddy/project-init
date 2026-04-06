@@ -20,10 +20,10 @@ project-init은 Claude Code 플러그인으로, 프로젝트 구조 초기화와
 ### Plugin Layer
 - **plugins/project-init/commands/** -- 6개의 슬래시 커맨드 (init-project, sync-docs, add-adr, add-module, add-runbook, health-check). 각 `.md` 파일이 하나의 커맨드를 정의.
 - **plugins/project-init/agents/** -- doc-sync-checker 에이전트. 문서 동기화 상태를 병렬로 분석.
-- **plugins/project-init/skills/** -- project-scaffolder 스킬. `references/` 디렉토리에 8개의 템플릿 파일 포함.
+- **plugins/project-init/skills/** -- project-scaffolder 스킬. `references/` 디렉토리에 9개의 템플릿 파일 포함.
 
 ### Generated Project Layer
-- **.claude/hooks/** -- PostToolUse(문서 동기화 감지), PreCommit(시크릿 스캔), SessionStart(컨텍스트 로드), Notification(웹훅).
+- **.claude/hooks/** -- PostToolUse(문서 동기화 감지), PreToolUse(시크릿 스캔), SessionStart(컨텍스트 로드), Notification(웹훅).
 - **.claude/skills/** -- code-review(신뢰도 기반 필터링), refactor, release, sync-docs 스킬.
 - **.claude/commands/** -- review, test-all, deploy 커맨드.
 - **.claude/agents/** -- code-reviewer(green), security-auditor(red) 에이전트.
@@ -53,7 +53,7 @@ project-init은 Claude Code 플러그인으로, 프로젝트 구조 초기화와
 │                         │  └──────────┘ └──────────┘  │     │
 │                         │  ┌──────────────────────┐   │     │
 │                         │  │ skills/scaffolder/    │   │     │
-│                         │  │  references/ (8 tmpl) │   │     │
+│                         │  │  references/ (9 tmpl) │   │     │
 │                         │  └──────────────────────┘   │     │
 │                         └─────────────────────────────┘     │
 └─────────────────────────────┬───────────────────────────────┘
@@ -106,7 +106,7 @@ User -> /init-project -> Detect Project -> Read Templates -> Generate Structure 
 
 ## Operations
 - Deployment: see [docs/runbooks/](runbooks/) (create deployment runbook as needed)
-- Release: use `/release` skill or `scripts/deploy.sh`
+- Release: use `/release` skill
 
 ---
 
@@ -123,10 +123,10 @@ When users run `/init-project`, it detects the existing project and generates a 
 ### Plugin Layer
 - **plugins/project-init/commands/** -- 6 slash commands (init-project, sync-docs, add-adr, add-module, add-runbook, health-check). Each `.md` file defines one command.
 - **plugins/project-init/agents/** -- doc-sync-checker agent. Analyzes documentation sync status in parallel.
-- **plugins/project-init/skills/** -- project-scaffolder skill. Contains 8 reference template files in `references/`.
+- **plugins/project-init/skills/** -- project-scaffolder skill. Contains 9 reference template files in `references/`.
 
 ### Generated Project Layer
-- **.claude/hooks/** -- PostToolUse (doc sync detection), PreCommit (secret scanning), SessionStart (context loading), Notification (webhook).
+- **.claude/hooks/** -- PostToolUse (doc sync detection), PreToolUse (secret scanning), SessionStart (context loading), Notification (webhook).
 - **.claude/skills/** -- code-review (confidence-based filtering), refactor, release, sync-docs skills.
 - **.claude/commands/** -- review, test-all, deploy commands.
 - **.claude/agents/** -- code-reviewer (green), security-auditor (red) agents.
@@ -156,7 +156,7 @@ When users run `/init-project`, it detects the existing project and generates a 
 │                         │  └──────────┘ └──────────┘  │     │
 │                         │  ┌──────────────────────┐   │     │
 │                         │  │ skills/scaffolder/    │   │     │
-│                         │  │  references/ (8 tmpl) │   │     │
+│                         │  │  references/ (9 tmpl) │   │     │
 │                         │  └──────────────────────┘   │     │
 │                         └─────────────────────────────┘     │
 └─────────────────────────────┬───────────────────────────────┘
@@ -209,4 +209,4 @@ User -> /init-project -> Detect Project -> Read Templates -> Generate Structure 
 
 ## Operations
 - Deployment: see [docs/runbooks/](runbooks/) (create deployment runbook as needed)
-- Release: use `/release` skill or `scripts/deploy.sh`
+- Release: use `/release` skill

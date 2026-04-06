@@ -102,11 +102,11 @@ Always include Auto-Sync Rules section.
 
 ## Step 5: Generate .claude/settings.json and All Hooks
 
-Read [references/settings-json-template.md](../skills/project-scaffolder/references/settings-json-template.md) and create `.claude/settings.json` with all hook registrations (SessionStart, PreCommit, PostToolUse, Notification).
+Read [references/settings-json-template.md](../skills/project-scaffolder/references/settings-json-template.md) and create `.claude/settings.json` with all hook registrations (SessionStart, PreToolUse, PostToolUse, Notification).
 
 Read [references/hook-scripts.md](../skills/project-scaffolder/references/hook-scripts.md) and create:
 - `.claude/hooks/check-doc-sync.sh` - PostToolUse documentation sync
-- `.claude/hooks/secret-scan.sh` - PreCommit secret scanning
+- `.claude/hooks/secret-scan.sh` - PreToolUse secret scanning
 - `.claude/hooks/session-context.sh` - SessionStart context loading
 - `.claude/hooks/notify.sh` - Notification webhook
 
@@ -267,7 +267,7 @@ Display the created structure and explain the auto-sync mechanisms:
 
 1. **CLAUDE.md Auto-Sync Rules** - Plan mode exit triggers doc updates
 2. **Hook (check-doc-sync.sh)** - Write/Edit triggers missing doc detection (with parent-dir walking)
-3. **Hook (secret-scan.sh)** - PreCommit blocks commits containing secrets
+3. **Hook (secret-scan.sh)** - PreToolUse blocks commits containing secrets
 4. **Hook (session-context.sh)** - Session start loads project context
 5. **Hook (commit-msg)** - Auto-removes Co-Authored-By lines (AI contributor exclusion)
 6. **Skill (/sync-docs)** - Manual full documentation sync with quality scoring
