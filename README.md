@@ -53,14 +53,14 @@ In short, project-init is a **harness engineering automation tool** — it gener
 
 ### Option A: GitHub URL (Recommended)
 
-**Step 1.** Register the marketplace and install (Shell):
+Terminal:
 
 ```bash
 claude plugin marketplace add https://github.com/whchoi98/project-init
 claude plugin install project-init@project-init
 ```
 
-**Step 2.** Restart Claude Code, then initialize your project (Claude Code):
+Claude Code (after restart):
 
 ```
 /init-project .
@@ -68,7 +68,7 @@ claude plugin install project-init@project-init
 
 ### Option B: Local Clone
 
-**Step 1.** Clone and register (Shell):
+Terminal:
 
 ```bash
 git clone https://github.com/whchoi98/project-init.git
@@ -76,41 +76,15 @@ claude plugin marketplace add ./project-init
 claude plugin install project-init@project-init
 ```
 
-**Step 2.** Restart Claude Code, then initialize your project (Claude Code):
+Claude Code (after restart):
 
 ```
 /init-project .
-```
-
-## Update
-
-**Step 1.** Fetch latest and reinstall (Shell):
-
-```bash
-claude plugin marketplace update project-init
-claude plugin install project-init@project-init
-```
-
-**Step 2.** Restart Claude Code. To apply updates to an existing project (Claude Code):
-
-```
-/init-project .
-```
-
-> **Note:** `/init-project .` detects existing files and only creates what is missing. `settings.json` is not overwritten automatically — see [Troubleshooting](#troubleshooting) for manual migration steps.
-
-## Uninstall
-
-Remove the plugin and marketplace registration (Shell):
-
-```bash
-claude plugin uninstall project-init@project-init
-claude plugin marketplace remove project-init
 ```
 
 ## Verify
 
-Check registration and installation status (Shell):
+Terminal:
 
 ```bash
 claude plugin marketplace list
@@ -118,10 +92,43 @@ claude plugin list | grep project-init
 # project-init@project-init  Version: 2.0.0  Status: ✔ enabled
 ```
 
-Check available commands after installation (Claude Code):
+Claude Code:
 
 ```
 /health-check
+```
+
+## Update
+
+Terminal:
+
+```bash
+claude plugin marketplace update project-init
+claude plugin install project-init@project-init
+```
+
+Claude Code (after restart):
+
+```
+/init-project .
+/sync-docs
+```
+
+> **Note:** `/init-project .` detects existing files and only creates what is missing. `settings.json` is not overwritten automatically — see [Troubleshooting](#troubleshooting) for manual migration steps.
+
+## Uninstall
+
+Terminal:
+
+```bash
+claude plugin uninstall project-init@project-init
+claude plugin marketplace remove project-init
+```
+
+Claude Code (optional — remove generated files from project):
+
+```bash
+rm -rf .claude/hooks .claude/skills .claude/commands .claude/agents .claude/settings.json
 ```
 
 ## Usage
@@ -487,14 +494,14 @@ Claude Code는 **하네스(Harness)** 위에서 동작합니다 — hooks, skill
 
 ### 방법 A: GitHub URL (권장)
 
-**Step 1.** 마켓플레이스 등록 및 설치 (Shell):
+Terminal:
 
 ```bash
 claude plugin marketplace add https://github.com/whchoi98/project-init
 claude plugin install project-init@project-init
 ```
 
-**Step 2.** Claude Code 재시작 후 프로젝트 초기화 (Claude Code):
+Claude Code (재시작 후):
 
 ```
 /init-project .
@@ -502,7 +509,7 @@ claude plugin install project-init@project-init
 
 ### 방법 B: 로컬 클론
 
-**Step 1.** 클론 및 등록 (Shell):
+Terminal:
 
 ```bash
 git clone https://github.com/whchoi98/project-init.git
@@ -510,41 +517,15 @@ claude plugin marketplace add ./project-init
 claude plugin install project-init@project-init
 ```
 
-**Step 2.** Claude Code 재시작 후 프로젝트 초기화 (Claude Code):
+Claude Code (재시작 후):
 
 ```
 /init-project .
-```
-
-## 업데이트
-
-**Step 1.** 최신 버전 가져오기 및 재설치 (Shell):
-
-```bash
-claude plugin marketplace update project-init
-claude plugin install project-init@project-init
-```
-
-**Step 2.** Claude Code 재시작 후 기존 프로젝트에 적용 (Claude Code):
-
-```
-/init-project .
-```
-
-> **참고:** `/init-project .`은 기존 파일을 감지하여 없는 것만 생성합니다. `settings.json`은 자동 덮어쓰지 않으므로 수동 마이그레이션이 필요합니다 — [문제 해결](#문제-해결) 섹션을 참고합니다.
-
-## 삭제
-
-플러그인 및 마켓플레이스 등록 해제 (Shell):
-
-```bash
-claude plugin uninstall project-init@project-init
-claude plugin marketplace remove project-init
 ```
 
 ## 확인
 
-등록 및 설치 상태 확인 (Shell):
+Terminal:
 
 ```bash
 claude plugin marketplace list
@@ -552,10 +533,43 @@ claude plugin list | grep project-init
 # project-init@project-init  Version: 2.0.0  Status: ✔ enabled
 ```
 
-설치 후 사용 가능한 커맨드 확인 (Claude Code):
+Claude Code:
 
 ```
 /health-check
+```
+
+## 업데이트
+
+Terminal:
+
+```bash
+claude plugin marketplace update project-init
+claude plugin install project-init@project-init
+```
+
+Claude Code (재시작 후):
+
+```
+/init-project .
+/sync-docs
+```
+
+> **참고:** `/init-project .`은 기존 파일을 감지하여 없는 것만 생성합니다. `settings.json`은 자동 덮어쓰지 않으므로 수동 마이그레이션이 필요합니다 — [문제 해결](#문제-해결) 섹션을 참고합니다.
+
+## 삭제
+
+Terminal:
+
+```bash
+claude plugin uninstall project-init@project-init
+claude plugin marketplace remove project-init
+```
+
+Claude Code (선택 — 프로젝트에서 생성된 파일 제거):
+
+```bash
+rm -rf .claude/hooks .claude/skills .claude/commands .claude/agents .claude/settings.json
 ```
 
 ## 사용법
