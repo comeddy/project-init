@@ -1,6 +1,6 @@
 ---
 description: Synchronize all project documentation with current code state
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash(find:*), Bash(git log:*), Bash(ls:*), Agent
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash(find:*), Bash(git log:*), Bash(git tag:*), Bash(git describe:*), Bash(git remote:*), Bash(ls:*), Agent
 ---
 
 # Sync Docs
@@ -159,9 +159,65 @@ For each existing runbook:
 
 ## Phase 7: README.md Sync
 
-Update `README.md` project structure section to match actual directory layout.
+Read [references/readme-template.md](../skills/project-scaffolder/references/readme-template.md) for structure and generation rules.
 
-## Phase 8: Report
+If `README.md` exists, read it and update the following:
+
+1. **Badges** - Update version badge to match current manifest version, verify license badge
+2. **Overview** - Sync with current `CLAUDE.md` project description
+3. **Features** - Add newly detected features, remove references to removed functionality
+4. **Prerequisites** - Update runtime versions from manifest `engines` or `.tool-versions`
+5. **Installation** - Verify install commands are still correct
+6. **Project Structure** - Regenerate directory tree to match actual layout
+7. **Testing** - Update test commands if build system changed
+8. **Language sync** - Ensure English and Korean sections contain identical information
+
+```bash
+# Detect current version
+ls package.json pyproject.toml Cargo.toml go.mod 2>/dev/null
+git describe --tags --abbrev=0 2>/dev/null
+```
+
+If `README.md` does not exist, generate a new bilingual README following the template. Auto-detect project information and ask the user for missing required fields.
+
+**Validation checklist:**
+- [ ] Language toggle badges link to `#english` and `#한국어`
+- [ ] Both language sections have identical structure
+- [ ] Code blocks specify the language
+- [ ] No emojis in the document
+- [ ] Version and license badges reflect current values
+
+## Phase 8: CHANGELOG.md Sync
+
+Read [references/changelog-template.md](../skills/project-scaffolder/references/changelog-template.md) for structure and generation rules.
+
+If `CHANGELOG.md` exists, read it and update:
+
+1. **Unreleased section** - Analyze commits since the last documented version and add new entries
+
+```bash
+# Find last documented version
+git tag --sort=-v:refname 2>/dev/null | head -5
+
+# Get commits since last tag
+git log --oneline $(git describe --tags --abbrev=0 2>/dev/null)...HEAD 2>/dev/null
+```
+
+2. **Categorize** new commits into standard types (Added, Changed, Fixed, etc.)
+3. **Write** bilingual entries (English imperative, Korean 명사형 종결)
+4. **Preserve** all existing released version entries unchanged
+5. **Language sync** - Ensure both language sections have identical version entries
+
+If `CHANGELOG.md` does not exist, generate a new bilingual CHANGELOG from full git tag history following the template.
+
+**Validation checklist:**
+- [ ] `[Unreleased]` section present in both language sections
+- [ ] Versions in reverse chronological order
+- [ ] Category headings in English in both sections
+- [ ] Reference links correctly formatted
+- [ ] Previously released versions unchanged
+
+## Phase 9: Report
 
 Present a comprehensive summary:
 
@@ -179,6 +235,16 @@ Present a comprehensive summary:
 
 ### Suggested ADRs
 - ADR-003: Adopted Redis for session caching (from commit abc1234)
+
+### README.md
+- Status: Created / Updated / No changes
+- Sections synced: X
+- Version badge: vX.Y.Z
+
+### CHANGELOG.md
+- Status: Created / Updated / No changes
+- New entries added: X (Added: X, Changed: X, Fixed: X)
+- Versions documented: X
 
 ### Remaining Gaps
 - src/utils/ has no CLAUDE.md (directory contains only helper functions)

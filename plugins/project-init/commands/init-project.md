@@ -197,10 +197,55 @@ Create `.mcp.json` with an empty configuration:
 
 If project context suggests MCP integrations (e.g., GitHub remote exists, database config found), add commented example configurations.
 
-## Step 12: Generate Supporting Files
+## Step 12: Generate README.md (Bilingual)
+
+Read [references/readme-template.md](../skills/project-scaffolder/references/readme-template.md) for structure and generation rules.
+
+If `README.md` already exists, read it to preserve user-specific content.
+
+**Auto-detect** from information gathered in Step 2:
+- Project name, description, version, license from manifest files
+- GitHub URL from `git remote get-url origin`
+- Tech stack from detected language/framework
+- Test commands from detected build system
+- Prerequisites from runtime version requirements
+
+**Ask the user** only for fields that cannot be auto-detected:
+- One-line description in Korean (if not available)
+- Maintainer name and GitHub username
+- Demo image/GIF path (optional)
+
+Generate `README.md` with bilingual (English/Korean) structure:
+1. Top layout: project name (h1), shields.io badges (license, version, language toggle), bilingual one-line description
+2. `# English` section with all applicable sections (Overview, Features, Prerequisites, Installation, Usage, Project Structure, Testing, Contributing, License, Contact)
+3. `# 한국어` section with identical structure in Korean
+4. No emojis, code blocks with language tags, 경어체 for Korean, imperative for English
+
+## Step 13: Generate CHANGELOG.md (Bilingual)
+
+Read [references/changelog-template.md](../skills/project-scaffolder/references/changelog-template.md) for structure and generation rules.
+
+If `CHANGELOG.md` already exists, preserve all existing entries.
+
+**Analyze git history:**
+```bash
+git tag --sort=-v:refname 2>/dev/null
+git log --oneline -30 2>/dev/null
+```
+
+Generate `CHANGELOG.md` with bilingual (English/Korean) structure:
+1. Title: `# Changelog` with language toggle badges
+2. `# English` section: introductory statement, `[Unreleased]`, version sections (newest first), reference links
+3. `# 한국어` section: identical structure with Korean descriptions
+4. Categorize changes under standard headings (Added, Changed, Deprecated, Removed, Fixed, Security)
+5. Category headings stay in English in both sections (Keep a Changelog convention)
+6. English entries use imperative verbs, Korean entries use 명사형 종결
+
+If this is a new project with no tags or history, create the template with an empty `[Unreleased]` section.
+
+## Step 14: Generate Other Supporting Files
 
 Create (only if they don't already exist):
-- `README.md` with project overview and structure
 - `.gitignore` with patterns appropriate for the detected language (include `.env`, `settings.local.json`)
 - `.env.example` from [references/docs-templates.md](../skills/project-scaffolder/references/docs-templates.md) - adapted to project type
 - `.editorconfig` with sensible defaults
@@ -215,7 +260,7 @@ Make scripts executable:
 chmod +x scripts/*.sh
 ```
 
-## Step 13: Initialize Git (Optional)
+## Step 15: Initialize Git (Optional)
 
 If `.git/` doesn't already exist, ask the user if they want to initialize:
 
@@ -238,7 +283,7 @@ git add -A
 git commit -m "Initial project structure for Claude Code"
 ```
 
-## Step 14: Generate Test Framework
+## Step 16: Generate Test Framework
 
 Read [references/tests-templates.md](../skills/project-scaffolder/references/tests-templates.md) and create:
 
@@ -261,7 +306,7 @@ Make test runner executable:
 chmod +x tests/run-all.sh tests/hooks/*.sh tests/structure/*.sh
 ```
 
-## Step 15: Summary
+## Step 17: Summary
 
 Display the created structure and explain the auto-sync mechanisms:
 
@@ -273,7 +318,9 @@ Display the created structure and explain the auto-sync mechanisms:
 6. **Skill (/sync-docs)** - Manual full documentation sync with quality scoring
 7. **Commands (/review, /test-all, /deploy)** - Common development workflows with error recovery
 8. **Agents (code-reviewer, security-auditor)** - Parallel analysis agents with structured output schemas
-9. **Test Suite (tests/run-all.sh)** - Automated harness validation
-10. **Deny List (settings.json)** - Dangerous commands explicitly blocked
+9. **README.md** - Bilingual (EN/KR) project documentation with shields.io badges
+10. **CHANGELOG.md** - Bilingual (EN/KR) change log following Keep a Changelog convention
+11. **Test Suite (tests/run-all.sh)** - Automated harness validation
+12. **Deny List (settings.json)** - Dangerous commands explicitly blocked
 
 If existing project was detected, highlight what was adapted vs created fresh.

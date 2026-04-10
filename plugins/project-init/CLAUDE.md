@@ -10,10 +10,12 @@ Core plugin providing project structure initialization, documentation quality sc
 - `commands/add-adr.md` - ADR creation
 - `commands/add-module.md` - Module scaffolding
 - `commands/add-runbook.md` - Runbook creation
+- `commands/generate-readme.md` - Bilingual README.md generation/update
+- `commands/generate-changelog.md` - Bilingual CHANGELOG.md generation/update
 - `commands/health-check.md` - Project validation
 - `agents/doc-sync-checker.md` - Documentation sync analysis agent
 - `skills/project-scaffolder/SKILL.md` - Scaffolding skill definition
-- `skills/project-scaffolder/references/` - 9 template files for code generation
+- `skills/project-scaffolder/references/` - 11 template files for code generation
 
 ## Rules
 - All commands must have clear step-by-step instructions
