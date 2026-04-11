@@ -27,18 +27,16 @@ When generating `docs/architecture.md`, Claude should:
 ```markdown
 # Architecture
 
-<p align="center">
-  <a href="#-한국어"><kbd>한국어</kbd></a>&nbsp;&nbsp;&nbsp;
-  <a href="#-english"><kbd>English</kbd></a>
-</p>
+[![English](https://img.shields.io/badge/lang-English-blue.svg)](#english)
+[![Korean](https://img.shields.io/badge/lang-한국어-red.svg)](#한국어)
 
 ---
 
-# 한국어
+# English
 
 ## System Overview
 
-<project_name>은(는) <brief_architecture_description>.
+<project_name> is <brief_architecture_description>.
 <key_technology_summary>.
 <primary_data_flow_summary>.
 
@@ -85,9 +83,9 @@ When generating `docs/architecture.md`, Claude should:
 
 ---
 
-# English
+# 한국어
 
-<!-- Same structure as Korean section, in English -->
+<!-- Same structure as English section, in Korean -->
 ```
 
 ### Layer Categories
@@ -172,10 +170,8 @@ Path: `docs/decisions/.template.md`
 ```markdown
 # ADR-000: Title
 
-<p align="center">
-  <a href="#-한국어"><kbd>한국어</kbd></a>&nbsp;&nbsp;&nbsp;
-  <a href="#-english"><kbd>English</kbd></a>
-</p>
+[![English](https://img.shields.io/badge/lang-English-blue.svg)](#english)
+[![Korean](https://img.shields.io/badge/lang-한국어-red.svg)](#한국어)
 
 ---
 
@@ -269,10 +265,8 @@ Path: `docs/runbooks/.template.md`
 ```markdown
 # Runbook: Title
 
-<p align="center">
-  <a href="#-한국어"><kbd>한국어</kbd></a>&nbsp;&nbsp;&nbsp;
-  <a href="#-english"><kbd>English</kbd></a>
-</p>
+[![English](https://img.shields.io/badge/lang-English-blue.svg)](#english)
+[![Korean](https://img.shields.io/badge/lang-한국어-red.svg)](#한국어)
 
 ---
 

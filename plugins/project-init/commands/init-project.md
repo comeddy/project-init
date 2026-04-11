@@ -149,7 +149,7 @@ Read [references/docs-templates.md](../skills/project-scaffolder/references/docs
 
 Generate `docs/architecture.md` following the Architecture Document template with:
 
-1. **Language Switcher**: HTML `<p align="center">` with `<kbd>` links to `#한국어` and `#english`
+1. **Language Switcher**: shields.io badge line with `[![English](...)]` and `[![Korean](...)]` linking to `#english` and `#한국어`. English section first, Korean section second.
 2. **System Overview**: 2-3 sentence summary of the project architecture
 3. **Components by Layer**: Group into Ingestion/Storage/Processing/Query/Presentation/Observability/Security layers. Only include layers that apply.
    - **For existing projects**: Read source directories, IaC files (terraform/, cdk/), Dockerfiles, and dependency files to auto-detect components

@@ -7,12 +7,13 @@ All document-generating commands (generate-readme, generate-changelog, add-adr, 
 
 ## Bilingual Structure
 
-All user-facing documents are generated in bilingual format (English/Korean) with the following structure:
+All user-facing documents are generated in bilingual format (English/Korean). **English section comes first**, followed by the Korean section. All documents use shields.io badges for the language toggle.
 
 ```markdown
 # <Document Title>
 
-<language toggle badges or navigation>
+[![English](https://img.shields.io/badge/lang-English-blue.svg)](#english)
+[![Korean](https://img.shields.io/badge/lang-한국어-red.svg)](#한국어)
 
 ---
 
@@ -29,32 +30,24 @@ All user-facing documents are generated in bilingual format (English/Korean) wit
 
 ### Rules
 
-- Horizontal rule (`---`) separates language sections
+- **English section always comes first**, Korean section follows
+- Language toggle is a single line of shields.io badges placed immediately below the document title
+- Horizontal rule (`---`) separates the badge line from English, and English from Korean
 - `# English` and `# 한국어` as h1 headings create GitHub auto-anchors (`#english`, `#한국어`)
 - Both language sections MUST have identical structure, order, and information
 - Code blocks, tables, commands, and directory structures are duplicated identically in both sections
 - Only descriptive text is translated; code, technical terms, and proper nouns remain unchanged
-- Language toggle uses shields.io badges or `<kbd>` navigation links
 
-### Language Toggle Formats
+### Language Toggle Format
 
-**Badge style** (for standalone documents like README, CHANGELOG):
+All documents use the same shields.io badge format on a single line:
 
 ```markdown
 [![English](https://img.shields.io/badge/lang-English-blue.svg)](#english)
 [![Korean](https://img.shields.io/badge/lang-한국어-red.svg)](#한국어)
 ```
 
-**Kbd style** (for internal docs like architecture, ADR, runbook):
-
-```markdown
-<p align="center">
-  <a href="#-한국어"><kbd>한국어</kbd></a>&nbsp;&nbsp;&nbsp;
-  <a href="#-english"><kbd>English</kbd></a>
-</p>
-```
-
-Choose the format that matches the document type. Standalone public docs use badge style; internal project docs use kbd style.
+This applies to all document types: README, CHANGELOG, architecture, ADR, runbook, and any other bilingual document.
 
 ---
 

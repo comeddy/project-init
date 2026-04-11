@@ -66,10 +66,8 @@ Create `docs/decisions/ADR-NNN-<title>.md` with bilingual (English/Korean) struc
 ```markdown
 # ADR-NNN: <Title in Natural Language>
 
-<p align="center">
-  <a href="#-한국어"><kbd>한국어</kbd></a>&nbsp;&nbsp;&nbsp;
-  <a href="#-english"><kbd>English</kbd></a>
-</p>
+[![English](https://img.shields.io/badge/lang-English-blue.svg)](#english)
+[![Korean](https://img.shields.io/badge/lang-한국어-red.svg)](#한국어)
 
 ---
 
