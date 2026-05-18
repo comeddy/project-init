@@ -74,3 +74,22 @@ if [ -f "$ADD_CMD" ]; then
     assert_contains "add-reference-doc: updates INDEX.md" "$ADD_CMD_CONTENT" "INDEX.md"
     assert_contains "add-reference-doc: updates root CLAUDE.md" "$ADD_CMD_CONTENT" "AUTO-MANAGED:references"
 fi
+
+# --- init-project Step 4.5: Implementation Reference Detection ---
+
+INIT_CMD="plugins/project-init/commands/init-project.md"
+if [ -f "$INIT_CMD" ]; then
+    INIT_CONTENT=$(cat "$INIT_CMD")
+    assert_contains "init-project: has Step 4.5 (reference detection)" "$INIT_CONTENT" "Implementation Reference Detection"
+    assert_contains "init-project: detects Dockerfile (infra)" "$INIT_CONTENT" "Dockerfile"
+    assert_contains "init-project: detects migrations/ (data)" "$INIT_CONTENT" "migrations/"
+    assert_contains "init-project: detects routes/ (api)" "$INIT_CONTENT" "routes/"
+    assert_contains "init-project: detects *.tf (iac)" "$INIT_CONTENT" "*.tf"
+    assert_contains "init-project: detects react/vue/svelte (frontend)" "$INIT_CONTENT" "react"
+    assert_contains "init-project: detects components/ (ui)" "$INIT_CONTENT" "components/"
+    assert_contains "init-project: detects .env.example (security)" "$INIT_CONTENT" ".env.example"
+    assert_contains "init-project: detects prompts/ (agent-llm)" "$INIT_CONTENT" "prompts/"
+    assert_contains "init-project: invokes /add-reference-doc logic" "$INIT_CONTENT" "reference-doc-template.md"
+    assert_contains "init-project: writes INDEX.md" "$INIT_CONTENT" "docs/reference/INDEX.md"
+    assert_contains "init-project: skip-on-exist policy" "$INIT_CONTENT" "existing, kept"
+fi
