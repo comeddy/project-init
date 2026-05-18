@@ -53,3 +53,24 @@ if [ -f "$TEMPLATE" ]; then
         fi
     done
 fi
+
+# --- /add-reference-doc command file ---
+
+ADD_CMD="plugins/project-init/commands/add-reference-doc.md"
+
+assert_file_exists "add-reference-doc.md exists" "$ADD_CMD"
+
+if [ -f "$ADD_CMD" ]; then
+    ADD_CMD_CONTENT=$(cat "$ADD_CMD")
+    assert_contains "add-reference-doc: has YAML frontmatter" "$ADD_CMD_CONTENT" "---"
+    assert_contains "add-reference-doc: has description" "$ADD_CMD_CONTENT" "description:"
+    assert_contains "add-reference-doc: has argument-hint" "$ADD_CMD_CONTENT" "argument-hint:"
+    assert_contains "add-reference-doc: lists allowed-tools" "$ADD_CMD_CONTENT" "allowed-tools:"
+    assert_contains "add-reference-doc: validates layer enum" "$ADD_CMD_CONTENT" "infrastructure"
+    assert_contains "add-reference-doc: validates layer enum" "$ADD_CMD_CONTENT" "agent-llm"
+    assert_contains "add-reference-doc: references template" "$ADD_CMD_CONTENT" "reference-doc-template.md"
+    assert_contains "add-reference-doc: writes to docs/reference/" "$ADD_CMD_CONTENT" "docs/reference/"
+    assert_contains "add-reference-doc: handles conflict" "$ADD_CMD_CONTENT" "overwrite"
+    assert_contains "add-reference-doc: updates INDEX.md" "$ADD_CMD_CONTENT" "INDEX.md"
+    assert_contains "add-reference-doc: updates root CLAUDE.md" "$ADD_CMD_CONTENT" "AUTO-MANAGED:references"
+fi
